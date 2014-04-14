@@ -16,7 +16,7 @@
 			defaultEvent			= "main.index",
 			requestStartHandler		= "",
 			requestEndHandler		= "",
-			applicationStartHandler = "",
+			applicationStartHandler = "main.onAppInit",
 			applicationEndHandler	= "",
 			sessionStartHandler 	= "",
 			sessionEndHandler		= "",

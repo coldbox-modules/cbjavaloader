@@ -10,4 +10,9 @@ component{
 		prc.hello = javaloader.create( "HelloWorld" ).init().hello();
 	}
 
+	// Run on first init
+	any function onAppInit( event, rc, prc ){
+		javaloader.appendPaths( getSetting( "ApplicationPath" ) & "jars" );
+	}
+
 }

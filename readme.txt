@@ -22,21 +22,14 @@ JavaLoader created & copyright by Mark Mandel
 ********************************************************************************
 LICENSE
 ********************************************************************************
-ColdBox is open source and bound to the Apache License, Version 2.0.
+Apache License, Version 2.0.
 
 ********************************************************************************
 IMPORTANT LINKS
 ********************************************************************************
 Source
 - https://github.com/ColdBox/cbox-javaloder
-
-********************************************************************************
-INSTALLATION
-********************************************************************************
-http://wiki.coldbox.org/wiki/Projects:FileBrowser.cfm
-
-Drop in your modules convention folder as 'filebrowser', fire it up 
-http://myapp/index.cfm/filebrowser
+- http://www.coldbox.org/forgebox/javaloader
 
 ********************************************************************************
 SYSTEM REQUIREMENTS

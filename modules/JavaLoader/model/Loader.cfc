@@ -56,7 +56,7 @@ component accessors="true" singleton{
     }
 
 	/**
-	* Retrieves a reference to the java class. To create a instance, you must run init() on this object 
+	* Retrieves a reference to the java class. To create a instance, you must run init() on this object
 	*/
 	function create( required string className ){
 		return getJavaLoaderFromScope().create( argumentCollection=arguments );
@@ -69,7 +69,7 @@ component accessors="true" singleton{
 	*/
 	function appendPaths( required string dirPath, string filter="*.jar" ){
 		// Convert paths to array of file locations
-		var qFiles	  		= queryJars( argumentCollection=arguments );
+		var qFiles	  		= arrayOfJars( argumentCollection=arguments );
 		var iterator 		= qFiles.iterator();
 		var thisFile 		= "";
 		var URLClassLoader  = "";
@@ -126,15 +126,17 @@ component accessors="true" singleton{
 	}
 
 	/**
-	* Get a query of jars
+	* Get an array of jars from a directory location
 	*/
-	array function queryJars( required string dirPath, string filter="*.jar" ){
+	array function arrayOfJars( required string dirPath, string filter="*.jar" ){
 		if( not directoryExists( arguments.dirPath ) ){
 			throw( message="Invalid library path", detail="The path is #path#", type="JavaLoader.DirectoryNotFoundException" );
 		}
 
 		return directoryList( arguments.dirPath, true, "array", arguments.filter, "name desc" );
 	}
+
+	/************************************** private *********************************************/
 
 	private function setJavaLoaderInScope( required any javaLoader ){
 		server[ getStaticIDKey() ] = arguments.javaLoader;
