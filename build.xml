@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<project name="build" basedir="." default="build">
+	
+	<!-- dynamic values for build -->
+	<tstamp prefix="start"/>
+	<property name="project.name" value="cbox-javaloader" />
+	<property name="build.label"  value="${project.name}-${start.DSTAMP}${start.TSTAMP}"/>
+	
+	<target name="clean">
+  		
+	</target>
+		
+	<target name="build" depends="clean">
+		<!-- Copy Readme -->	
+      	<copy todir="./filebrowser">
+        	<fileset file="../README.txt" />
+      		<fileset file="../license.txt" />
+        	<fileset file="../APACHE_LICENSE.TXT" />
+        </copy>
+		<zip destfile="${build.label}.zip">
+			<fileset dir=".">
+				<exclude name="build.xml"/>
+				<exclude name="java/**"/>
+			</fileset>
+		</zip>
+		<delete file="./filebrowser/README.txt" />
+		<delete file="./filebrowser/license.txt" />
+		<delete file="./filebrowser/APACHE_LICENSE.TXT" />
+	</target>
+
+</project>
