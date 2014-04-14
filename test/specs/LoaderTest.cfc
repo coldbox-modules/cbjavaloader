@@ -2,7 +2,7 @@
 * My BDD Test
 */
 component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
-	
+
 /*********************************** LIFE CYCLE Methods ***********************************/
 
 	// executes before all suites+specs in the run() method
@@ -21,7 +21,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 	function run(){
 		// all your suites go here.
 		describe( "JavaLoader Module", function(){
-		
+
 			beforeEach(function( currentSpec ){
 				setup();
 			});
@@ -32,15 +32,21 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 			});
 
 			it( "should class load jar files", function(){
-				var loader = getLoader();
-				expect(	loader.create( "HelloWorld" ).init().hello() )
+				var event = execute( "main.index" );
+				var prc = event.getCollection( private=true );
+				expect(	prc.hello )
 					.toBe( "Hello World" );
 			});
-			
+
 			it( "should get loaded URLs", function(){
 				var loader = getLoader();
 				expect(	loader.getLoadedURls() ).toBeArray();
 				expect( loader.getLoadedURLs() ).toHaveLength( 1 );
+			});
+
+			it( "should retrieve via custom DSL", function(){
+				var hello = getWireBox().getInstance( dsl="javaloader:HelloWorld" );
+				expect( isObject( hello ) ).toBeTrue();
 			});
 		});
 	}
@@ -48,5 +54,5 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 	private function getLoader(){
 		return getWireBox().getInstance( "loader@javaloader" );
 	}
-	
+
 }

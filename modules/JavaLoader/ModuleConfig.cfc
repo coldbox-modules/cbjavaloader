@@ -40,6 +40,9 @@ component {
 		interceptors = [
 		];
 
+		// Register Custom DSL, don't map it because it is too late, mapping DSLs are only good by the parent app
+		controller.getWireBox().registerDSL( namespace="javaloader", path="#moduleMapping#.model.JavaLoaderDSL" );
+
 		// Bind Loader Proxy Class
 		binder.map( "loader@javaloader" )
 			.to( "#moduleMapping#.model.Loader" );

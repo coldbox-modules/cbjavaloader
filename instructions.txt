@@ -7,6 +7,11 @@ box install javaloader
 
 The module has a default folder called 'lib' where any jars you drop there will be class loaded.
 The module also registers the following mapping in WireBox: loader@javaloader
+The module also registers a new WireBox namespace called "javaloader".  You can then use this
+custom DSL for injecting direct java class loaded classes
+
+property name="name"  inject="javaloader:{class-path}";
+property name="hello" inject="javaloader:HelloWorld";
 
 You can then use this mapping to create the java files, append more paths and more.
 Below is a simple example:
