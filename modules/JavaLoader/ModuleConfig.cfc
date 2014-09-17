@@ -1,3 +1,9 @@
+/**
+*********************************************************************************
+* Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
+* www.coldbox.org | www.luismajano.com | www.ortussolutions.com
+********************************************************************************
+*/
 component {
 
 	// Module Properties
@@ -41,15 +47,15 @@ component {
 		];
 
 		// Register Custom DSL, don't map it because it is too late, mapping DSLs are only good by the parent app
-		controller.getWireBox().registerDSL( namespace="javaloader", path="#moduleMapping#.model.JavaLoaderDSL" );
+		controller.getWireBox().registerDSL( namespace="javaloader", path="#moduleMapping#.models.JavaLoaderDSL" );
 
 		// Bind Loader Proxy Class
 		binder.map( "loader@javaloader" )
-			.to( "#moduleMapping#.model.Loader" );
+			.to( "#moduleMapping#.models.Loader" );
 
 		// Bind Core JavaLoader
 		binder.map( "jl@javaloader" )
-			.to( "#moduleMapping#.model.javaloader.JavaLoader" )
+			.to( "#moduleMapping#.models.javaloader.JavaLoader" )
 			.initArg( name="loadPaths", 				value=settings.loadPaths )
 			.initArg( name="loadColdFusionClassPath", 	value=settings.loadColdFusionClassPath )
 			.initArg( name="parentClassLoader", 		value=settings.parentClassLoader )
@@ -62,7 +68,7 @@ component {
 	* Fired when the module is registered and activated.
 	*/
 	function onLoad(){
-		// Load JavaLoader and class load
+		// Load JavaLoader and class loading
 		wirebox.getInstance( "loader@javaloader" ).setup();
 	}
 
