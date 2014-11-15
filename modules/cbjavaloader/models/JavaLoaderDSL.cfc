@@ -37,7 +37,7 @@ component implements="coldbox.system.ioc.dsl.IDSLBuilder" accessors="true"{
 		var className = listLast( arguments.definition.dsl, ":" );
 
 		// Get Dependency, if not found, exception is thrown
-		return variables.injector.getInstance( "loader@javaloader" ).create( className );
+		return variables.injector.getInstance( "loader@cbjavaloader" ).create( className );
 	}
 
 }

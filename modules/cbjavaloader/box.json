@@ -2,7 +2,7 @@
 	"name" 		: "JavaLoader",
 	"version"	: "1.0.0",
 	"author" 	: "Luis Majano <lmajano@ortussolutions.com",
-	"slug"		: "javaloader",
+	"slug"		: "cbjavaloader",
 	"type"		: "modules",
 	"homepage"	: "http://www.coldbox.org",
 	"documentation"		: "http://wiki.coldbox.org",
@@ -16,6 +16,6 @@
 	],
 	"engines"	: [
 		{ "type" : "railo", "version" : ">4.1" },
-		{ "type" : "adobe", "version" : ">9.02" },
+		{ "type" : "adobe", "version" : ">9.02" }
 	]
 }
