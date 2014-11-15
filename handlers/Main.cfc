@@ -3,7 +3,7 @@
 */
 component{
 
-	property name="javaloader" inject="loader@javaloader";
+	property name="javaloader" inject="loader@cbjavaloader";
 
 	// Index
 	any function index( event,rc, prc ){

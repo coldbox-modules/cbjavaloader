@@ -52,7 +52,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 	}
 
 	private function getLoader(){
-		return getWireBox().getInstance( "loader@javaloader" );
+		return getWireBox().getInstance( "loader@cbjavaloader" );
 	}
 
 }

@@ -9,7 +9,7 @@
 component accessors="true" singleton{
 
 	// DI
-	property name="moduleSettings" inject="coldbox:moduleSettings:javaloader";
+	property name="moduleSettings" inject="coldbox:moduleSettings:cbjavaloader";
 
 	// ID key saved in server scope to avoid leakage
 	property name="staticIDKey";
@@ -37,7 +37,7 @@ component accessors="true" singleton{
 		if( not isJavaLoaderInScope() ){
 			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive"{
 				if( not isJavaLoaderInScope() ){
-					setJavaLoaderInScope( variables.wirebox.getInstance( "jl@javaloader" ) );
+					setJavaLoaderInScope( variables.wirebox.getInstance( "jl@cbjavaloader" ) );
 				}
 			}
 		} else {
