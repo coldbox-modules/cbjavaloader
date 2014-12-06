@@ -36,12 +36,12 @@ component {
 		// Bind Core JavaLoader
 		binder.map( "jl@cbjavaloader" )
 			.to( "#moduleMapping#.models.javaloader.JavaLoader" )
-			.initArg( name="loadPaths", 				value=settings.javaloader.loadPaths )
-			.initArg( name="loadColdFusionClassPath", 	value=settings.javaloader.loadColdFusionClassPath )
-			.initArg( name="parentClassLoader", 		value=settings.javaloader.parentClassLoader )
-			.initArg( name="sourceDirectories", 		value=settings.javaloader.sourceDirectories )
-			.initArg( name="compileDirectory", 			value=settings.javaloader.compileDirectory )
-			.initArg( name="trustedSource", 			value=settings.javaloader.trustedSource );
+			.initArg( name="loadPaths", 				value=settings.modules.cbjavaloader.settings.loadPaths )
+			.initArg( name="loadColdFusionClassPath", 	value=settings.modules.cbjavaloader.settings.loadColdFusionClassPath )
+			.initArg( name="parentClassLoader", 		value=settings.modules.cbjavaloader.settings.parentClassLoader )
+			.initArg( name="sourceDirectories", 		value=settings.modules.cbjavaloader.settings.sourceDirectories )
+			.initArg( name="compileDirectory", 			value=settings.modules.cbjavaloader.settings.compileDirectory )
+			.initArg( name="trustedSource", 			value=settings.modules.cbjavaloader.settings.trustedSource );
 		// Load JavaLoader and class loading
 		wirebox.getInstance( "loader@cbjavaloader" ).setup();
 	}
@@ -73,7 +73,7 @@ component {
 		var javaLoaderDSL 	= oConfig.getPropertyMixin( "javaloader", "variables", structnew() );
 
 		//defaults
-		configStruct.javaloader = {
+		configStruct.modules.cbjavaloader.settings = {
 			// The array paths to load
 			loadPaths = getJars( getDirectoryFromPath( getCurrentTemplatePath() ) & "lib" ),
 			// Load ColdFusion classes with loader
@@ -88,8 +88,8 @@ component {
 			trustedSource = false
 		};
 
-		// incorporate settings
-		structAppend( configStruct.javaloader, javaLoaderDSL, true );
+		// incorporate settings		
+		structAppend( configStruct.modules.cbjavaloader.settings, javaLoaderDSL, true );
 	}
 
 }
