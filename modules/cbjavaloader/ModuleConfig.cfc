@@ -11,7 +11,7 @@ component {
 	this.author 			= "Ortus Solutions";
 	this.webURL 			= "http://www.ortussolutions.com";
 	this.description 		= "A JavaLoader Module for ColdBox";
-	this.version			= "1.0.0+@build.version@";
+	this.version			= "1.0.1+@build.version@";
 	// If true, looks for views in the parent first, if not found, then in the module. Else vice-versa
 	this.viewParentLookup 	= true;
 	// If true, looks for layouts in the parent first, if not found, then in module. Else vice-versa
@@ -58,7 +58,7 @@ component {
 	*/
 	private array function getJars( required string dirPath, string filter="*.jar" ){
 		if( not directoryExists( arguments.dirPath ) ){
-			throw( message="Invalid library path", detail="The path is #path#", type="JavaLoader.DirectoryNotFoundException" );
+			throw( message="Invalid library path", detail="The path is #arguments.dirPath#", type="JavaLoader.DirectoryNotFoundException" );
 		}
 
 		return directoryList( arguments.dirPath, true, "array", arguments.filter, "name desc" );
