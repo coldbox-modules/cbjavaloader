@@ -1,12 +1,19 @@
-﻿/********************************************************************************
+﻿/*
 * Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-* www.coldbox.org | www.luismajano.com | www.ortussolutions.com
-********************************************************************************
+* www.ortussolutions.com
+* ---
 * The JavaLoader WireBox DSL
 */
 component implements="coldbox.system.ioc.dsl.IDSLBuilder" accessors="true"{
 
+	/**
+	* WireBox Injector
+	*/
 	property name="injector";
+
+	/**
+	* Logger
+	*/
 	property name="log";
 
 

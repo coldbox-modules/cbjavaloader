@@ -19,6 +19,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 /*********************************** BDD SUITES ***********************************/
 
 	function run(){
+
 		// all your suites go here.
 		describe( "JavaLoader Module", function(){
 
@@ -49,6 +50,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 				expect( isObject( hello ) ).toBeTrue();
 			});
 		});
+
 	}
 
 	private function getLoader(){

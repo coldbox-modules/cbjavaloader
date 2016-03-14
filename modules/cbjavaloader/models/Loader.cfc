@@ -1,17 +1,20 @@
-/********************************************************************************
+/**
 * Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-* www.coldbox.org | www.luismajano.com | www.ortussolutions.com
-********************************************************************************
+* www.ortussolutions.com
+* ---
 * Loads External Java Classes, while providing access to ColdFusion classes by interfacing with JavaLoader
 * it Stores a reference in server scope to avoid leakage.
-* @author Luis Majano
 */
 component accessors="true" singleton{
 
-	// DI
+	/**
+	* Module Settings
+	*/
 	property name="moduleSettings" inject="coldbox:moduleSettings:cbjavaloader";
 
-	// ID key saved in server scope to avoid leakage
+	/**
+	* ID key saved in server scope to avoid leakage
+	*/
 	property name="staticIDKey";
 
 	/**
