@@ -1,5 +1,5 @@
-<cfcomponent output="false" hint="My App Configuration">
-<cfscript>
+component{
+
 	// Configure ColdBox Application
 	function configure(){
 
@@ -35,7 +35,7 @@
 			//Error/Exception Handling
 			exceptionHandler		= "",
 			onInvalidEvent			= "",
-			customErrorTemplate		= "",
+			customErrorTemplate		= "/coldbox/system/includes/BugReport.cfm",
 
 			//Application Aspects
 			handlerCaching 			= false,
@@ -48,7 +48,7 @@
 		};
 
 		// Activate WireBox
-		wirebox = { enabled = true, singletonReload=true };
+		wirebox = { enabled = true, singletonReload=false };
 
 		// Module Directives
 		modules = {
@@ -81,5 +81,5 @@
 		];
 
 	}
-</cfscript>
-</cfcomponent>
+
+}

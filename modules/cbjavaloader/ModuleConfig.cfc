@@ -1,8 +1,7 @@
 /**
-*********************************************************************************
 * Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
-* www.coldbox.org | www.luismajano.com | www.ortussolutions.com
-********************************************************************************
+* www.ortussolutions.com
+* ---
 */
 component {
 
@@ -11,7 +10,7 @@ component {
 	this.author 			= "Ortus Solutions";
 	this.webURL 			= "http://www.ortussolutions.com";
 	this.description 		= "A JavaLoader Module for ColdBox";
-	this.version			= "1.0.1+@build.version@";
+	this.version			= "@version.number@+@build.number@";
 	// If true, looks for views in the parent first, if not found, then in the module. Else vice-versa
 	this.viewParentLookup 	= true;
 	// If true, looks for layouts in the parent first, if not found, then in module. Else vice-versa
@@ -23,7 +22,8 @@ component {
 	
 	function configure(){
 		// Register Custom DSL, don't map it because it is too late, mapping DSLs are only good by the parent app
-		controller.getWireBox().registerDSL( namespace="javaloader", path="#moduleMapping#.models.JavaLoaderDSL" );
+		controller.getWireBox()
+			.registerDSL( namespace="javaloader", path="#moduleMapping#.models.JavaLoaderDSL" );
 	}
 
 	/**
@@ -72,10 +72,10 @@ component {
 		var configStruct 	= controller.getConfigSettings();
 		var javaLoaderDSL 	= oConfig.getPropertyMixin( "javaloader", "variables", structnew() );
 
-		//defaults
+		// Default Configurations
 		configStruct.modules.cbjavaloader.settings = {
 			// The array paths to load
-			loadPaths = getJars( getDirectoryFromPath( getCurrentTemplatePath() ) & "lib" ),
+			loadPaths = variables.modulePath & "lib",
 			// Load ColdFusion classes with loader
 			loadColdFusionClassPath = false,
 			// Attach a custom class loader as a parent
@@ -83,10 +83,38 @@ component {
 			// Directories that contain Java source code that are to be dynamically compiled
 			sourceDirectories = [],
 			// the directory to build the .jar file for dynamic compilation in, defaults to ./tmp
-			compileDirectory = getDirectoryFromPath( getCurrentTemplatePath() ) & "model/javaloader/tmp",
+			compileDirectory = variables.modulePath & "model/javaloader/tmp",
 			// Whether or not the source is trusted, i.e. it is going to change? Defaults to false, so changes will be recompiled and loaded
 			trustedSource = false
 		};
+
+		// Default load paths, empty array
+		if( !structKeyExists( javaLoaderDSL, "loadPaths" ) ){
+			javaLoaderDSL.loadPaths = [];
+		}
+		// Array of locations
+		if( isArray( javaLoaderDSL.loadPaths ) ){
+			var aJarPaths = [];
+			for( var thisLocation in javaLoaderDSL.loadPaths ){
+				if( !directoryExists( thisLocation ) ){
+					throw( "Cannot load #thisLocation# as it is not a valid path" );
+				}
+				aJarPaths.addAll( getJars( thisLocation ) );
+			}	
+			javaLoaderDSL.loadPaths = aJarPaths;
+		}
+		// Single directory? Get all Jars in it
+		if( isSimpleValue( javaLoaderDSL.loadPaths ) and directoryExists( javaLoaderDSL.loadPaths ) ){
+			javaLoaderDSL.loadPaths = getJars( javaLoaderDSL.loadPaths );
+		} 
+		// Single Jar?
+		if( isSimpleValue( javaLoaderDSL.loadPaths ) and fileExists( javaLoaderDSL.loadPaths ) ){
+			javaLoaderDSL.loadPaths = [ javaLoaderDSL.loadPaths ];
+		} 
+		// If simple value and no length
+		if( isSimpleValue( javaLoaderDSL.loadPaths ) and !len( javaLoaderDSL.loadPaths ) ){
+			javaLoaderDSL.loadPaths = [];
+		} 
 
 		// incorporate settings		
 		structAppend( configStruct.modules.cbjavaloader.settings, javaLoaderDSL, true );
