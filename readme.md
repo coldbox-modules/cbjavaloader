@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ColdBox/cbox-javaloader.svg?branch=development)](https://travis-ci.org/ColdBox/cbox-javaloader)
+
 # Welcome to the CBJavaloader Project
 
 The CB JavaLoader module will interface with Mark Mandel's JavaLoader to allow you to do a network class loader, compiler and proxy.  
