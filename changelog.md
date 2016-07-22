@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.3.0
+* Adobe CF Compatiblity
+
 ## 1.2.0
 * Travis Updates	
 * Changing the array of locations check so that it doesn't fail if a JAR file is passed in the array.

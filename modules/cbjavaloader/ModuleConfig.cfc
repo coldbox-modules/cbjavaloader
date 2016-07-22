@@ -97,7 +97,7 @@ component {
 			var aJarPaths = [];
 			for( var thisLocation in javaLoaderDSL.loadPaths ){
 				if( directoryExists( thisLocation ) ) {
-					aJarPaths.addAll( getJars( thisLocation ) )
+					aJarPaths.addAll( getJars( thisLocation ) );
 				} else if ( !fileExists( thisLocation ) ) {
 					throw( "Cannot load #thisLocation# as it is not a valid path or file" );
 				}
