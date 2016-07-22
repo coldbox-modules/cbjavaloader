@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/coldbox-modules/cbox-javaloader.svg?branch=development)](https://travis-ci.org/coldbox-modules/cbox-javaloader)
+
 # Welcome to the CBJavaloader Project
 
 The CB JavaLoader module will interface with Mark Mandel's JavaLoader to allow you to do a network class loader, compiler and proxy.  
@@ -9,6 +11,7 @@ Apache License, Version 2.0.
 - https://github.com/ColdBox/cbox-javaloder
 - http://forgebox.io/view/javaloader
 - Docs: https://github.com/Ortus-Solutions/JavaLoader/wiki
+- [Changelog](changelog.md)
 
 ## System Requirements
 - Lucee 4.5+

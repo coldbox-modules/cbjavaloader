@@ -96,11 +96,12 @@ component {
 		if( isArray( javaLoaderDSL.loadPaths ) ){
 			var aJarPaths = [];
 			for( var thisLocation in javaLoaderDSL.loadPaths ){
-				if( !directoryExists( thisLocation ) ){
-					throw( "Cannot load #thisLocation# as it is not a valid path" );
+				if( directoryExists( thisLocation ) ) {
+					aJarPaths.addAll( getJars( thisLocation ) );
+				} else if ( !fileExists( thisLocation ) ) {
+					throw( "Cannot load #thisLocation# as it is not a valid path or file" );
 				}
-				aJarPaths.addAll( getJars( thisLocation ) );
-			}	
+			}
 			javaLoaderDSL.loadPaths = aJarPaths;
 		}
 		// Single directory? Get all Jars in it

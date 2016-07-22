@@ -1,6 +1,7 @@
 {
 	"name" 		: "JavaLoader",
 	"version"	: "@version.number@+@build.number@",
+	"location"	: "http://downloads.ortussolutions.com.s3.amazonaws.com/ortussolutions/coldbox-modules/cbjavaloader/@version.number@/cbjavaloader-@version.number@.zip",
 	"author" 	: "Ortus Solutions.com <info@ortussolutions.com",
 	"slug"		: "cbjavaloader",
 	"type"		: "modules",
@@ -14,13 +15,8 @@
 	"contributors"		: [
 		"Brad Wood <bdw429s@gmail.com>", "Curt Gratz <gratz@computerknowhow.com>"
 	],
-	"engines"	: [
-		{ "type" : "lucee", "version" : ">4.5" },
-		{ "type" : "adobe", "version" : ">9.02" }
-	],
 	"ignore":[
         "**/.*",
-        "tests",
-        "*/.md"
+        "tests"
     ]
 }
