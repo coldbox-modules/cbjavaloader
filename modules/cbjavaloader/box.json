@@ -1,13 +1,13 @@
 {
 	"name" 		: "JavaLoader",
+	"author" 	: "Ortus Solutions.com <info@ortussolutions.com>",
 	"version"	: "@version.number@+@build.number@",
-	"location"	: "http://downloads.ortussolutions.com.s3.amazonaws.com/ortussolutions/coldbox-modules/cbjavaloader/@version.number@/cbjavaloader-@version.number@.zip",
-	"author" 	: "Ortus Solutions.com <info@ortussolutions.com",
+	"location"  : "http://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbjavaloader/@build.version@/cbjavaloader-@build.version@.zip",
 	"slug"		: "cbjavaloader",
 	"type"		: "modules",
-	"homepage"	: "https://github.com/ColdBox/cbox-javaloader",
-	"documentation"		: "https://github.com/ColdBox/cbox-javaloader",
-	"repository"		: { "type" : "git", "url" : "https://github.com/ColdBox/cbox-javaloader" },
+	"homepage"	: "https://github.com/coldbox-modules/cbox-javaloader",
+	"documentation"		: "https://github.com/coldbox-modules/cbox-javaloader",
+	"repository"		: { "type" : "git", "url" : "https://github.com/coldbox-modules/cbox-javaloader" },
 	"shortDescription"	: "A module to class load, compile and do much more with Java",
 	"license"			: [ 
 		{ "type" : "Apache2", "url" : "http://www.apache.org/licenses/LICENSE-2.0.html" } 
@@ -17,6 +17,7 @@
 	],
 	"ignore":[
         "**/.*",
-        "tests"
+        "tests",
+        "*/.md"
     ]
 }
