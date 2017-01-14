@@ -28,6 +28,7 @@ install:
 script:
   # Execute build via ANT
   - ant -DisTravis=true -Dbuild.number=$TRAVIS_BUILD_NUMBER -f workbench/build.xml
+  - curl http://localhost:49616/tests/runner.cfm > log.html && cat log.html
   # Spit out log just in case we need to debug
   - box server log
 
