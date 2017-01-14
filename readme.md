@@ -8,14 +8,14 @@ The CB JavaLoader module will interface with Mark Mandel's JavaLoader to allow y
 Apache License, Version 2.0.
 
 ## Important Links
-- https://github.com/ColdBox/cbox-javaloder
-- http://forgebox.io/view/javaloader
-- Docs: https://github.com/Ortus-Solutions/JavaLoader/wiki
+- https://github.com/coldbox-modules/cbox-javaloader
+- https://forgebox.io/view/javaloader
+- Docs: https://github.com/Ortus-Solutions/JavaLoader
 - [Changelog](changelog.md)
 
 ## System Requirements
 - Lucee 4.5+
-- ColdFusion 9+
+- ColdFusion 10+
 
 ## Instructions
 

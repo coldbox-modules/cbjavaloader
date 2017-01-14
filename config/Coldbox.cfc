@@ -6,7 +6,7 @@ component{
 		// coldbox directives
 		coldbox = {
 			//Application Setup
-			appName 				= "JavaLoader Shell",
+			appName 				= "App Shell",
 
 			//Development Settings
 			reinitPassword			= "",
@@ -47,14 +47,6 @@ component{
 		settings = {
 		};
 
-		// Activate WireBox
-		wirebox = { enabled = true, singletonReload=false };
-
-		// Module Directives
-		modules = {
-			//Turn to false in production, on for dev
-			autoReload = false
-		};
 
 		//LogBox DSL
 		logBox = {
@@ -62,7 +54,7 @@ component{
 			appenders = {
 				files={class="coldbox.system.logging.appenders.RollingFileAppender",
 					properties = {
-						filename = "javaloader", filePath="/#appMapping#/logs"
+						filename = "appshell", filePath="/#appMapping#/logs"
 					}
 				}
 			},

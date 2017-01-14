@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+## 1.3.1
+* Travis Update Builds
+* Adobe CF 2016,11,10 compatiblity fixes
+
 ## 1.3.0
 * Adobe CF Compatiblity
 
