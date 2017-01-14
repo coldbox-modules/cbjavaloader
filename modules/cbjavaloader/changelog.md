@@ -2,7 +2,7 @@ CHANGELOG
 =========
 
 ## 1.2.0
-* CF2016 fix where the precedence of arguments results in the parent scope, not the child.
+
 ## 1.1.0
 * Travis Integration
 * DocBox update
