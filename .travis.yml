@@ -20,6 +20,8 @@ install:
   - sudo apt-get update && sudo apt-get --assume-yes install commandbox
   # Test that the box binary is available and ready for our tests
   - box version
+  # Install Dependencies
+  - box install
   # Store the Ortus API Key for forgebox publishing in `master`
   - box config set endpoints.forgebox.APIToken=$FORGEBOX_API_TOKEN > /dev/null
   # Startup Server
@@ -28,7 +30,7 @@ install:
 script:
   # Execute build via ANT
   - ant -DisTravis=true -Dbuild.number=$TRAVIS_BUILD_NUMBER -f workbench/build.xml
-  - curl http://localhost:49616/tests/runner.cfm > log.html && cat log.html
+  #- curl http://localhost:49616/tests/runner.cfm > log.html && cat log.html
   # Spit out log just in case we need to debug
   - box server log
 
