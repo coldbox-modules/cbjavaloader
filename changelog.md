@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+## 1.3.2
+* Removal of security issues with Javaloader `tags` directory
+* Securing execution of Javaloader models
+* Updated to unified workbench
+
 ## 1.3.1
 * Travis Update Builds
 * Adobe CF 2016,11,10 compatiblity fixes
