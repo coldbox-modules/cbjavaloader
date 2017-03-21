@@ -31,7 +31,7 @@ before_install:
 
 install:
   # Install Commandbox
-  - sudo apt-get update && sudo apt-get --assume-yes install rsync havaged jq commandbox
+  - sudo apt-get update && sudo apt-get --assume-yes install rsync jq commandbox
   # Test that the box binary is available and ready for our tests
   - box version
   # If using auto-publish, you will need to provide your API token with this line:
@@ -85,6 +85,7 @@ deploy:
     on:
       branch: 
         - master
+        - development
       condition: "$ENGINE = lucee@4.5"
     skip_cleanup: true
     #AWS Credentials need to be set in Travis
