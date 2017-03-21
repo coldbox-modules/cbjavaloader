@@ -6,7 +6,7 @@ component{
 		// coldbox directives
 		coldbox = {
 			//Application Setup
-			appName 				= "App Shell",
+			appName 				= "Development Shell",
 
 			//Development Settings
 			reinitPassword			= "",
