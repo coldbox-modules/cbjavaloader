@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.3.3
+* Cleanup of testing Application.cfc
+
 ## 1.3.2
 * Removal of security issues with Javaloader `tags` directory
 * Securing execution of Javaloader models
