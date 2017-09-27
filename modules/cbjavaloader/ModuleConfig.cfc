@@ -8,7 +8,7 @@ component {
 	// Module Properties
 	this.title 				= "JavaLoader";
 	this.author 			= "Ortus Solutions";
-	this.webURL 			= "http://www.ortussolutions.com";
+	this.webURL 			= "https://www.ortussolutions.com";
 	this.description 		= "A JavaLoader Module for ColdBox";
 	this.version			= "@build.version@+@build.number@";
 	// If true, looks for views in the parent first, if not found, then in the module. Else vice-versa
@@ -17,7 +17,10 @@ component {
 	this.layoutParentLookup = true;
 	// CF Mapping
 	this.cfmapping			= "cbjavaloader";
-	
+
+	/**
+	* Configure module
+	*/	
 	function configure(){
 		// Register Custom DSL, don't map it because it is too late, mapping DSLs are only good by the parent app
 		controller.getWireBox()
