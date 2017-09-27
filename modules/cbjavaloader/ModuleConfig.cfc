@@ -8,7 +8,7 @@ component {
 	// Module Properties
 	this.title 				= "JavaLoader";
 	this.author 			= "Ortus Solutions";
-	this.webURL 			= "http://www.ortussolutions.com";
+	this.webURL 			= "https://www.ortussolutions.com";
 	this.description 		= "A JavaLoader Module for ColdBox";
 	this.version			= "@build.version@+@build.number@";
 	// If true, looks for views in the parent first, if not found, then in the module. Else vice-versa
@@ -17,7 +17,10 @@ component {
 	this.layoutParentLookup = true;
 	// CF Mapping
 	this.cfmapping			= "cbjavaloader";
-	
+
+	/**
+	* Configure module
+	*/	
 	function configure(){
 		// Register Custom DSL, don't map it because it is too late, mapping DSLs are only good by the parent app
 		controller.getWireBox()
@@ -31,6 +34,7 @@ component {
 		var settings = controller.getConfigSettings();
 		// parse parent settings
 		parseParentSettings();
+
 		// Bind Core JavaLoader
 		binder.map( "jl@cbjavaloader" )
 			.to( "#moduleMapping#.models.javaloader.JavaLoader" )
@@ -40,6 +44,7 @@ component {
 			.initArg( name="sourceDirectories", 		value=settings.modules.cbjavaloader.settings.sourceDirectories )
 			.initArg( name="compileDirectory", 			value=settings.modules.cbjavaloader.settings.compileDirectory )
 			.initArg( name="trustedSource", 			value=settings.modules.cbjavaloader.settings.trustedSource );
+		
 		// Load JavaLoader and class loading
 		wirebox.getInstance( "loader@cbjavaloader" ).setup();
 	}
@@ -59,7 +64,13 @@ component {
 			throw( message="Invalid library path", detail="The path is #arguments.dirPath#", type="JavaLoader.DirectoryNotFoundException" );
 		}
 
-		return directoryList( arguments.dirPath, true, "array", arguments.filter, "name desc" );
+		return directoryList( 
+			arguments.dirPath, 
+			true, 
+			"array", 
+			arguments.filter, 
+			"name desc" 
+		);
 	}
 
 	/**
@@ -90,6 +101,7 @@ component {
 		if( !structKeyExists( javaLoaderDSL, "loadPaths" ) ){
 			javaLoaderDSL.loadPaths = [];
 		}
+
 		// Array of locations
 		if( isArray( javaLoaderDSL.loadPaths ) ){
 			var aJarPaths = [];
@@ -102,18 +114,29 @@ component {
 			}
 			javaLoaderDSL.loadPaths = aJarPaths;
 		}
+
 		// Single directory? Get all Jars in it
 		if( isSimpleValue( javaLoaderDSL.loadPaths ) and directoryExists( javaLoaderDSL.loadPaths ) ){
 			javaLoaderDSL.loadPaths = getJars( javaLoaderDSL.loadPaths );
-		} 
+		}
+		
 		// Single Jar?
 		if( isSimpleValue( javaLoaderDSL.loadPaths ) and fileExists( javaLoaderDSL.loadPaths ) ){
 			javaLoaderDSL.loadPaths = [ javaLoaderDSL.loadPaths ];
 		} 
+
 		// If simple value and no length
 		if( isSimpleValue( javaLoaderDSL.loadPaths ) and !len( javaLoaderDSL.loadPaths ) ){
 			javaLoaderDSL.loadPaths = [];
 		} 
+
+		// Now that we have figured out the user's settings, let's incorporate ours
+
+		// Dynamic Proxy
+		arrayPrepend(
+			javaLoaderDSL.loadPaths,
+			variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
+		);
 
 		// incorporate settings		
 		structAppend( configStruct.modules.cbjavaloader.settings, javaLoaderDSL, true );

@@ -42,7 +42,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 			it( "should get loaded URLs", function(){
 				var loader = getLoader();
 				expect(	loader.getLoadedURls() ).toBeArray();
-				expect( loader.getLoadedURLs() ).toHaveLength( 1 );
+				expect( loader.getLoadedURLs() ).toHaveLength( 2 );
 			});
 
 			it( "should retrieve via custom DSL", function(){

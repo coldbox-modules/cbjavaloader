@@ -15,7 +15,7 @@ Apache License, Version 2.0.
 
 ## System Requirements
 - Lucee 4.5+
-- ColdFusion 10+
+- ColdFusion 11+
 
 ## Instructions
 
