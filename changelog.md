@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.4.0
+* Updated internal core Javaloader library to latest 1.2 release
+
 ## 1.3.3
 * Cleanup of testing Application.cfc
 
