@@ -3,6 +3,8 @@ CHANGELOG
 
 ## 1.4.0
 * Updated internal core Javaloader library to latest 1.2 release
+* Added automatic dynamic proxy class loading
+* Deprecating support for cf10
 
 ## 1.3.3
 * Cleanup of testing Application.cfc

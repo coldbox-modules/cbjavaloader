@@ -34,6 +34,7 @@ component {
 		var settings = controller.getConfigSettings();
 		// parse parent settings
 		parseParentSettings();
+
 		// Bind Core JavaLoader
 		binder.map( "jl@cbjavaloader" )
 			.to( "#moduleMapping#.models.javaloader.JavaLoader" )
@@ -43,6 +44,7 @@ component {
 			.initArg( name="sourceDirectories", 		value=settings.modules.cbjavaloader.settings.sourceDirectories )
 			.initArg( name="compileDirectory", 			value=settings.modules.cbjavaloader.settings.compileDirectory )
 			.initArg( name="trustedSource", 			value=settings.modules.cbjavaloader.settings.trustedSource );
+		
 		// Load JavaLoader and class loading
 		wirebox.getInstance( "loader@cbjavaloader" ).setup();
 	}
@@ -62,7 +64,13 @@ component {
 			throw( message="Invalid library path", detail="The path is #arguments.dirPath#", type="JavaLoader.DirectoryNotFoundException" );
 		}
 
-		return directoryList( arguments.dirPath, true, "array", arguments.filter, "name desc" );
+		return directoryList( 
+			arguments.dirPath, 
+			true, 
+			"array", 
+			arguments.filter, 
+			"name desc" 
+		);
 	}
 
 	/**
@@ -93,6 +101,7 @@ component {
 		if( !structKeyExists( javaLoaderDSL, "loadPaths" ) ){
 			javaLoaderDSL.loadPaths = [];
 		}
+
 		// Array of locations
 		if( isArray( javaLoaderDSL.loadPaths ) ){
 			var aJarPaths = [];
@@ -105,18 +114,29 @@ component {
 			}
 			javaLoaderDSL.loadPaths = aJarPaths;
 		}
+
 		// Single directory? Get all Jars in it
 		if( isSimpleValue( javaLoaderDSL.loadPaths ) and directoryExists( javaLoaderDSL.loadPaths ) ){
 			javaLoaderDSL.loadPaths = getJars( javaLoaderDSL.loadPaths );
-		} 
+		}
+		
 		// Single Jar?
 		if( isSimpleValue( javaLoaderDSL.loadPaths ) and fileExists( javaLoaderDSL.loadPaths ) ){
 			javaLoaderDSL.loadPaths = [ javaLoaderDSL.loadPaths ];
 		} 
+
 		// If simple value and no length
 		if( isSimpleValue( javaLoaderDSL.loadPaths ) and !len( javaLoaderDSL.loadPaths ) ){
 			javaLoaderDSL.loadPaths = [];
 		} 
+
+		// Now that we have figured out the user's settings, let's incorporate ours
+
+		// Dynamic Proxy
+		arrayPrepend(
+			javaLoaderDSL.loadPaths,
+			variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
+		);
 
 		// incorporate settings		
 		structAppend( configStruct.modules.cbjavaloader.settings, javaLoaderDSL, true );
