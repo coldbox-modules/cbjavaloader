@@ -1,20 +1,20 @@
 {
     "name":"cbjavaloader Builder",
-    "version":"1.4.0",
+    "version":"1.5.0",
     "slug":"cbjavaloader-shell",
     "private":false,
     "defaultPort":0,
     "dependencies":{
-        "coldbox":"^4.3.0",
-        "workbench":"git+https://github.com/Ortus-Solutions/unified-workbench.git"
+        "workbench":"git+https://github.com/Ortus-Solutions/unified-workbench.git",
+        "coldbox":"^4.3.0+188"
     },
     "devDependencies":{
-        "testbox":"^2.4.0+80"
+        "testbox":"^2.6.0+156"
     },
     "installPaths":{
-        "coldbox":"coldbox",
-        "testbox":"testbox",
-        "workbench":"workbench"
+        "workbench":"workbench/",
+        "coldbox":"coldbox/",
+        "testbox":"testbox/"
     },
     "testbox":{
         "runner":"http://localhost:49616"

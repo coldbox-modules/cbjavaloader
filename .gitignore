@@ -15,3 +15,6 @@ artifacts/*
 apidocs/docbox/*
 workbench/*
 build/*
+
+# Engines
+.engine/**
