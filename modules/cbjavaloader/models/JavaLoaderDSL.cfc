@@ -4,7 +4,7 @@
 * ---
 * The JavaLoader WireBox DSL
 */
-component implements="coldbox.system.ioc.dsl.IDSLBuilder" accessors="true"{
+component accessors="true"{
 
 	/**
 	* WireBox Injector
@@ -20,7 +20,7 @@ component implements="coldbox.system.ioc.dsl.IDSLBuilder" accessors="true"{
 	/**
 	* Constructor as per interface
 	*/
-	public any function init( required any injector ) output="false"{
+	public any function init( required any injector ){
 		variables.injector 	= arguments.injector;
 		variables.log		= arguments.injector.getLogBox().getLogger( this );
 
@@ -30,7 +30,7 @@ component implements="coldbox.system.ioc.dsl.IDSLBuilder" accessors="true"{
 	/**
 	* Process an incoming DSL definition and produce an object with it.
 	*/
-	public any function process( required definition, targetObject ) output="false"{
+	public any function process( required definition, targetObject ){
 		var DSLNamespace = listFirst( arguments.definition.dsl, ":" );
 		switch( DSLNamespace ){
 			case "javaloader" : { return getJavaLoaderDSL( argumentCollection=arguments );}
