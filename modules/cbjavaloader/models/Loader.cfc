@@ -133,7 +133,7 @@ component accessors="true" singleton{
 	*/
 	array function arrayOfJars( required string dirPath, string filter="*.jar" ){
 		if( not directoryExists( arguments.dirPath ) ){
-			throw( message="Invalid library path", detail="The path is #path#", type="JavaLoader.DirectoryNotFoundException" );
+			throw( message="Invalid library path", detail="The path is #dirPath#", type="JavaLoader.DirectoryNotFoundException" );
 		}
 
 		return directoryList( arguments.dirPath, true, "array", arguments.filter, "name desc" );
