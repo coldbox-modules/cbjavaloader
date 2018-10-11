@@ -5,12 +5,8 @@
 * Loads External Java Classes, while providing access to ColdFusion classes by interfacing with JavaLoader
 * it Stores a reference in server scope to avoid leakage.
 */
-component accessors="true" singleton{
-
-	/**
-	* Module Settings
-	*/
-	property name="moduleSettings" inject="coldbox:moduleSettings:cbjavaloader";
+component accessors="true" singleton {
+	property name="wirebox" inject="wirebox";
 
 	/**
 	* ID key saved in server scope to avoid leakage
@@ -19,34 +15,28 @@ component accessors="true" singleton{
 
 	/**
 	* Constructor
-	* @coldbox.inject coldbox
 	*/
-	function init( required coldbox ){
+	function init(){
 		// setup a static ID key according to coldbox app
-		variables.staticIDKey = "cbox-javaloader-#arguments.coldbox.getAppHash()#";
-		// setup wirebox reference
-		variables.wirebox 	  = arguments.coldbox.getWireBox();
+		variables.staticIDKey = "cbox-javaloader-#hash( getCurrentTemplatePath() )#";
 		return this;
 	}
 
 	/**
 	* Setup class loading
-	* @loadPaths.hint An array of directories to classload
-	* @loadColdFusionClassPath.hint Loads the CF library class loader as well
-	* @parentClassLoader.hint The parent java.lang.ClassLoader to attach the network class loader to.
 	*/
-	function setup(){
+	function setup( required struct moduleSettings ){
 		// verify we have it loaded
 		if( not isJavaLoaderInScope() ){
 			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive"{
 				if( not isJavaLoaderInScope() ){
-					setJavaLoaderInScope( variables.wirebox.getInstance( "jl@cbjavaloader" ) );
+					setJavaLoaderInScope( variables.wirebox.getInstance( name="jl@cbjavaloader", initArguments=moduleSettings ) );
 				}
 			}
 		} else {
 			// reconfigure it, maybe settings changed
 			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive"{
-				getJavaLoaderFromScope().init( argumentCollection=variables.moduleSettings );
+				getJavaLoaderFromScope().init( argumentCollection=moduleSettings );
 			}
 		}
 	}

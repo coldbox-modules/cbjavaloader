@@ -11,19 +11,30 @@ component {
 	this.webURL 			= "https://www.ortussolutions.com";
 	this.description 		= "A JavaLoader Module for ColdBox";
 	this.version			= "@build.version@+@build.number@";
-	// If true, looks for views in the parent first, if not found, then in the module. Else vice-versa
-	this.viewParentLookup 	= true;
-	// If true, looks for layouts in the parent first, if not found, then in module. Else vice-versa
-	this.layoutParentLookup = true;
-	// CF Mapping
 	this.cfmapping			= "cbjavaloader";
 
 	/**
 	* Configure module
 	*/	
 	function configure(){
+		
+		settings = {
+			// The array paths to load
+			loadPaths = [],
+			// Load ColdFusion classes with loader
+			loadColdFusionClassPath = false,
+			// Attach a custom class loader as a parent
+			parentClassLoader = "",
+			// Directories that contain Java source code that are to be dynamically compiled
+			sourceDirectories = [],
+			// the directory to build the .jar file for dynamic compilation in, defaults to ./tmp
+			compileDirectory = variables.modulePath & "models/javaloader/tmp",
+			// Whether or not the source is trusted, i.e. it is going to change? Defaults to false, so changes will be recompiled and loaded
+			trustedSource = false
+		};
+		
 		// Register Custom DSL, don't map it because it is too late, mapping DSLs are only good by the parent app
-		controller.getWireBox()
+		wireBox
 			.registerDSL( namespace="javaloader", path="#moduleMapping#.models.JavaLoaderDSL" );
 	}
 
@@ -31,29 +42,44 @@ component {
 	* Fired when the module is registered and activated.
 	*/
 	function onLoad(){
-		var settings = controller.getConfigSettings();
-		// parse parent settings
-		parseParentSettings();
 
 		// Bind Core JavaLoader
 		binder.map( "jl@cbjavaloader" )
-			.to( "#moduleMapping#.models.javaloader.JavaLoader" )
-			.initArg( name="loadPaths", 				value=settings.modules.cbjavaloader.settings.loadPaths )
-			.initArg( name="loadColdFusionClassPath", 	value=settings.modules.cbjavaloader.settings.loadColdFusionClassPath )
-			.initArg( name="parentClassLoader", 		value=settings.modules.cbjavaloader.settings.parentClassLoader )
-			.initArg( name="sourceDirectories", 		value=settings.modules.cbjavaloader.settings.sourceDirectories )
-			.initArg( name="compileDirectory", 			value=settings.modules.cbjavaloader.settings.compileDirectory )
-			.initArg( name="trustedSource", 			value=settings.modules.cbjavaloader.settings.trustedSource );
+			.to( "#moduleMapping#.models.javaloader.JavaLoader" );
+	
+		// Duplicating so our final change won't affect the main module settings
+		var finalSettings = duplicate( settings );
 		
+		// Start with empty array
+		finalSettings.loadPaths = [];
+
+		// Grab module settings
+		var moduleSettingsLoadPath = settings.loadPaths;
+
+		// Force array
+		if( isSimpleValue( moduleSettingsLoadPath ) ) {
+			moduleSettingsLoadPath = moduleSettingsLoadPath.listToArray();
+		}
+		
+		// Loop over settings, adding files and expanding directories
+		for( var thisLocation in moduleSettingsLoadPath ){
+			if( directoryExists( thisLocation ) ) {
+				finalSettings.loadPaths.addAll( getJars( thisLocation ) );
+			} else if ( fileExists( thisLocation ) ) {
+				finalSettings.loadPaths.append( thisLocation );
+			} else {
+				throw( "Javalaoder cannot load #thisLocation# as it is not a valid path or file" );				
+			}
+		}
+
+		// Dynamic Proxy
+		arrayPrepend(
+			finalSettings.loadPaths,
+			variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
+		);
+				
 		// Load JavaLoader and class loading
-		wirebox.getInstance( "loader@cbjavaloader" ).setup();
-	}
-
-	/**
-	* Fired when the module is unregistered and unloaded
-	*/
-	function onUnload(){
-
+		wirebox.getInstance( "loader@cbjavaloader" ).setup( finalSettings );
 	}
 
 	/**
@@ -71,75 +97,6 @@ component {
 			arguments.filter, 
 			"name desc" 
 		);
-	}
-
-	/**
-	* parse parent settings
-	*/
-	private function parseParentSettings(){
-		var oConfig 		= controller.getSetting( "ColdBoxConfig" );
-		var configStruct 	= controller.getConfigSettings();
-		var javaLoaderDSL 	= oConfig.getPropertyMixin( "javaloader", "variables", structnew() );
-
-		// Default Configurations
-		configStruct.modules.cbjavaloader.settings = {
-			// The array paths to load
-			loadPaths = variables.modulePath & "lib",
-			// Load ColdFusion classes with loader
-			loadColdFusionClassPath = false,
-			// Attach a custom class loader as a parent
-			parentClassLoader = "",
-			// Directories that contain Java source code that are to be dynamically compiled
-			sourceDirectories = [],
-			// the directory to build the .jar file for dynamic compilation in, defaults to ./tmp
-			compileDirectory = variables.modulePath & "model/javaloader/tmp",
-			// Whether or not the source is trusted, i.e. it is going to change? Defaults to false, so changes will be recompiled and loaded
-			trustedSource = false
-		};
-
-		// Default load paths, empty array
-		if( !structKeyExists( javaLoaderDSL, "loadPaths" ) ){
-			javaLoaderDSL.loadPaths = [];
-		}
-
-		// Array of locations
-		if( isArray( javaLoaderDSL.loadPaths ) ){
-			var aJarPaths = [];
-			for( var thisLocation in javaLoaderDSL.loadPaths ){
-				if( directoryExists( thisLocation ) ) {
-					aJarPaths.addAll( getJars( thisLocation ) );
-				} else if ( !fileExists( thisLocation ) ) {
-					throw( "Cannot load #thisLocation# as it is not a valid path or file" );
-				}
-			}
-			javaLoaderDSL.loadPaths = aJarPaths;
-		}
-
-		// Single directory? Get all Jars in it
-		if( isSimpleValue( javaLoaderDSL.loadPaths ) and directoryExists( javaLoaderDSL.loadPaths ) ){
-			javaLoaderDSL.loadPaths = getJars( javaLoaderDSL.loadPaths );
-		}
-		
-		// Single Jar?
-		if( isSimpleValue( javaLoaderDSL.loadPaths ) and fileExists( javaLoaderDSL.loadPaths ) ){
-			javaLoaderDSL.loadPaths = [ javaLoaderDSL.loadPaths ];
-		} 
-
-		// If simple value and no length
-		if( isSimpleValue( javaLoaderDSL.loadPaths ) and !len( javaLoaderDSL.loadPaths ) ){
-			javaLoaderDSL.loadPaths = [];
-		} 
-
-		// Now that we have figured out the user's settings, let's incorporate ours
-
-		// Dynamic Proxy
-		arrayPrepend(
-			javaLoaderDSL.loadPaths,
-			variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
-		);
-
-		// incorporate settings		
-		structAppend( configStruct.modules.cbjavaloader.settings, javaLoaderDSL, true );
 	}
 
 }
