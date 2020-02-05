@@ -68,7 +68,7 @@ component {
 			} else if ( fileExists( thisLocation ) ) {
 				finalSettings.loadPaths.append( thisLocation );
 			} else {
-				throw( "Javalaoder cannot load #thisLocation# as it is not a valid path or file" );				
+				throw( "Javaloader cannot load #thisLocation# as it is not a valid path or file" );				
 			}
 		}
 
