@@ -17,8 +17,8 @@ Apache License, Version 2.0.
 
 ## System Requirements
 
-- Lucee 4.5+
-- ColdFusion 11+
+- Lucee 5+
+- ColdFusion 2016+
 
 ## Instructions
 
@@ -29,6 +29,7 @@ Just drop into your **modules** folder or use the box-cli to install
 The module has a default folder called `lib` where any jars you drop there will be class loaded automatically.  However, we recommend using the `loadpaths` setting for selecting an array of locations to class load, so when the module updates you won't lose those files.
 
 ## Models
+
 The module registers the following mapping in WireBox: `loader@cbjavaloader`. Which is the class you will use to class load, append paths and much more.  Check out the included API Docs for much more information.  The main methods of importance of the java loader are:
 
 * `create( class )` - Create a loaded Java class
@@ -36,6 +37,7 @@ The module registers the following mapping in WireBox: `loader@cbjavaloader`. Wh
 * `getLoadedURLs()` - Get all the loaded URLs
 
 ## WireBox DSL
+
 The module also registers a new WireBox DSL called `javaloader`.  You can then use this custom DSL for injecting direct java class loaded classes very easily:
 
 ```js
@@ -101,7 +103,8 @@ Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
 www.ortussolutions.com
 ********************************************************************************
 
-#### HONOR GOES TO GOD ABOVE ALL
+### HONOR GOES TO GOD ABOVE ALL
+
 Because of His grace, this project exists. If you don't like this, then don't read it, its not for you.
 
 >"Therefore being justified by faith, we have peace with God through our Lord Jesus Christ:
@@ -112,4 +115,5 @@ And hope maketh not ashamed; because the love of God is shed abroad in our heart
 Holy Ghost which is given unto us. ." Romans 5:5
 
 ### THE DAILY BREAD
+
  > "I am the way, and the truth, and the life; no one comes to the Father, but by me (JESUS)" Jn 14:1-12
