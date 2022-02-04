@@ -28,7 +28,11 @@
 		"/server*.json"
     ],
     "dependencies":{},
-    "devDependencies":{},
+    "devDependencies":{
+        "commandbox-dotenv":"*",
+        "commandbox-cfconfig":"*",
+        "commandbox-cfformat":"*"
+	},
     "installPaths":{},
 	"testbox":{
         "runner":"http://localhost:60299/tests/runner.cfm"
