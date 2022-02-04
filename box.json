@@ -1,7 +1,7 @@
 {
     "name":"JavaLoader",
     "author":"Ortus Solutions.com <info@ortussolutions.com>",
-    "version":"2.1.0",
+    "version":"2.2.0",
     "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbjavaloader/@build.version@/cbjavaloader-@build.version@.zip",
     "slug":"cbjavaloader",
     "type":"modules",
@@ -25,16 +25,16 @@
     "ignore":[
         "**/.*",
         "test-harness",
-		"/server*.json"
+        "/server*.json"
     ],
     "dependencies":{},
     "devDependencies":{
         "commandbox-dotenv":"*",
         "commandbox-cfconfig":"*",
         "commandbox-cfformat":"*"
-	},
+    },
     "installPaths":{},
-	"testbox":{
+    "testbox":{
         "runner":"http://localhost:60299/tests/runner.cfm"
     },
     "scripts":{
@@ -42,7 +42,7 @@
         "format":"cfformat run models/,test-harness/**/*.cfc,ModuleConfig.cfc --overwrite",
         "format:watch":"cfformat watch models/,test-harness/**/*.cfc,ModuleConfig.cfc ./.cfformat.json",
         "format:check":"cfformat check models/,test-harness/**/*.cfc,ModuleConfig.cfc",
-		"cfpm":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\"' | run",
+        "cfpm":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\"' | run",
         "cfpm:install":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\" install ${1}' | run",
         "install:2021":"run-script cfpm:install zip,debugger"
     }
