@@ -1,16 +1,18 @@
 ﻿/**
-* My Event Handler Hint
-*/
-component{
+ * My Event Handler Hint
+ */
+component {
 
 	property name="javaloader" inject="loader@cbjavaloader";
 
 	// Index
-	any function index( event,rc, prc ){
+	any function index( event, rc, prc ){
+		prc.test = wirebox.getInstance( dsl = "javaloader:HelloWorld" );
 
-		prc.test = wirebox.getInstance( dsl="javaloader:HelloWorld" );
-
-		prc.hello = javaloader.create( "HelloWorld" ).init().hello();
+		prc.hello = javaloader
+			.create( "HelloWorld" )
+			.init()
+			.hello();
 	}
 
 	// Run on first init

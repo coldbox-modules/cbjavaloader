@@ -24,16 +24,22 @@
     ],
     "ignore":[
         "**/.*",
-        "tests",
-        "*/.md"
+        "test-harness",
+		"/server*.json"
     ],
     "dependencies":{},
     "devDependencies":{},
     "installPaths":{},
+	"testbox":{
+        "runner":"http://localhost:60299/tests/runner.cfm"
+    },
     "scripts":{
         "release":"recipe build/release.boxr",
-        "format":"cfformat run models/,test-harness/tests/ --overwrite",
-        "format:watch":"cfformat watch models/,test-harness/tests/",
-        "format:check":"cfformat check models/,test-harness/tests/"
+        "format":"cfformat run models/,test-harness/**/*.cfc,ModuleConfig.cfc --overwrite",
+        "format:watch":"cfformat watch models/,test-harness/**/*.cfc,ModuleConfig.cfc ./.cfformat.json",
+        "format:check":"cfformat check models/,test-harness/**/*.cfc,ModuleConfig.cfc",
+		"cfpm":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\"' | run",
+        "cfpm:install":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\" install ${1}' | run",
+        "install:2021":"run-script cfpm:install zip,debugger"
     }
 }

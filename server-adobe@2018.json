@@ -10,7 +10,11 @@
         },
         "rewrites":{
             "enable":"true"
-        }
+        },
+		"webroot": "test-harness"
+    },
+    "jvm":{
+        "heapSize":"1024"
     },
     "openBrowser":"false"
 }

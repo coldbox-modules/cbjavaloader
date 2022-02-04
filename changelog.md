@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+## [2.10.0] => 202-FEB-04
+
+### Added
+
+* More formatting rules
+* Migration to github actions
+* Updates from new module template
+
+----
+
 ## [2.0.0] => 2020-MAY-14
 
 ### Added
@@ -68,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0]
 
-* Travis Updates	
+* Travis Updates
 * Changing the array of locations check so that it doesn't fail if a JAR file is passed in the array.
 * Readme Updates
 * ForgeBox2 Updates
