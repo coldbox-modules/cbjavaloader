@@ -1,8 +1,10 @@
-[![Build Status](https://travis-ci.org/coldbox-modules/cbox-javaloader.svg?branch=development)](https://travis-ci.org/coldbox-modules/cbox-javaloader)
+# Welcome to the cbJavaloader Project
 
-# Welcome to the CBJavaloader Project
+<a href="https://github.com/coldbox-modules/cbjavaloader/actions/workflows/ci.yml">
+	<img src="https://github.com/coldbox-modules/cbjavaloader/actions/workflows/ci.yml/badge.svg">
+</a>
 
-The CB JavaLoader module will interface with Mark Mandel's JavaLoader to allow you to do a network class loader, compiler and proxy.  
+This module will allow your ColdBox applications to class load different Java classes and libraries at runtime via the JavaLoader project.  It also registers a WireBox DSL so you can easily inject Java classes into your objects using WireBox.
 
 ## License
 
@@ -10,8 +12,8 @@ Apache License, Version 2.0.
 
 ## Important Links
 
-- https://github.com/coldbox-modules/cbox-javaloader
-- https://forgebox.io/view/javaloader
+- Repository: https://github.com/coldbox-modules/cbjavaloader
+- ForgeBox: https://forgebox.io/view/cbjavaloader
 - Docs: https://github.com/Ortus-Solutions/JavaLoader
 - [Changelog](changelog.md)
 
@@ -111,7 +113,7 @@ Because of His grace, this project exists. If you don't like this, then don't re
 By whom also we have access by faith into this grace wherein we stand, and rejoice in hope of the glory of God.
 And not only so, but we glory in tribulations also: knowing that tribulation worketh patience;
 And patience, experience; and experience, hope:
-And hope maketh not ashamed; because the love of God is shed abroad in our hearts by the 
+And hope maketh not ashamed; because the love of God is shed abroad in our hearts by the
 Holy Ghost which is given unto us. ." Romans 5:5
 
 ### THE DAILY BREAD
