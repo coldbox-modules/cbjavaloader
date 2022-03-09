@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+## [2.1.1] => 2022-MAR-09
+
+### Fixed
+
+* Updated the `setup-commandbox` command to avoid having the `box.zip` included in the repo
+* Removal of `server-*.json` files on the final build
+* Updated github actions to latests module standards
+
+----
+
 ## [2.1.0] => 2022-FEB-04
 
 ### Added

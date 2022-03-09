@@ -61,10 +61,12 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}-${{ hashFiles( 'test-harness/box.json' ) }}
 
-      - name: Install Test Harness Dependencies
-        working-directory: ./test-harness
+      - name: Install Dependencies
         run: |
+          # Root Dependencies
           box install
+          # Test Harness Dependencies
+          cd test-harness && box install
 
       - name: Start ${{ matrix.cfengine }} Server
         run: |
@@ -117,7 +119,7 @@ jobs:
           SLACK_CHANNEL: coding
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           SLACK_ICON_EMOJI: ":bell:"
-          SLACK_MESSAGE: '${{ env.MODULE_ID }} tests failed :cry:'
-          SLACK_TITLE: ${{ env.MODULE_ID }} Tests For ${{ matrix.cfengine }} failed
+          SLACK_MESSAGE: '${{ github.repository }} tests failed :cry:'
+          SLACK_TITLE: ${{ github.repository }} Tests For ${{ matrix.cfengine }} failed
           SLACK_USERNAME: CI
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

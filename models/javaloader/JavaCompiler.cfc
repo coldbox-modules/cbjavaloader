@@ -142,7 +142,13 @@
 		<cfreturn jarPath/>
 	</cffunction>
 
-	<cffunction name="getVersion" hint="returns the version number" access="public" returntype="string" output="false">
+	<cffunction
+		name      ="getVersion"
+		hint      ="returns the version number"
+		access    ="public"
+		returntype="string"
+		output    ="false"
+	>
 		<cfreturn "0.1.b"/>
 	</cffunction>
 
