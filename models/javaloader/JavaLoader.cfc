@@ -207,7 +207,11 @@
 			</cfscript>
 
 			<cfif isSimpleValue( arguments[ 1 ] )>
-				<cfinvoke method="#arguments[ 1 ]#" returnvariable="local.return" argumentCollection="#local.funcArgs#"/>
+				<cfinvoke
+					method            ="#arguments[ 1 ]#"
+					returnvariable    ="local.return"
+					argumentCollection="#local.funcArgs#"
+				/>
 			<cfelseif isCustomFunction( arguments[ 1 ] )>
 				<cfscript>
 				func         = arguments[ 1 ];
