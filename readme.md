@@ -36,8 +36,9 @@ Apache License, Version 2.0.
 
 ## System Requirements
 
+- BoxLang 1+
 - Lucee 5+
-- ColdFusion 2016+
+- ColdFusion 2021+
 
 ## Instructions
 
