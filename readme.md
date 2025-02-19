@@ -1,3 +1,20 @@
+<p align="center">
+	<img src="https://www.ortussolutions.com/__media/coldbox-185-logo.png">
+	<br>
+	<img src="https://www.ortussolutions.com/__media/wirebox-185.png" height="125">
+	<img src="https://www.ortussolutions.com/__media/cachebox-185.png" height="125" >
+	<img src="https://www.ortussolutions.com/__media/logbox-185.png"  height="125">
+</p>
+
+<p align="center">
+	Copyright Since 2005 ColdBox Platform by Luis Majano and Ortus Solutions, Corp
+	<br>
+	<a href="https://www.coldbox.org">www.coldbox.org</a> |
+	<a href="https://www.ortussolutions.com">www.ortussolutions.com</a>
+</p>
+
+----
+
 # Welcome to the cbJavaloader Project
 
 <a href="https://github.com/coldbox-modules/cbjavaloader/actions/workflows/ci.yml">
@@ -19,8 +36,9 @@ Apache License, Version 2.0.
 
 ## System Requirements
 
+- BoxLang 1+
 - Lucee 5+
-- ColdFusion 2016+
+- ColdFusion 2021+
 
 ## Instructions
 
@@ -34,9 +52,9 @@ The module has a default folder called `lib` where any jars you drop there will 
 
 The module registers the following mapping in WireBox: `loader@cbjavaloader`. Which is the class you will use to class load, append paths and much more.  Check out the included API Docs for much more information.  The main methods of importance of the java loader are:
 
-* `create( class )` - Create a loaded Java class
-* `appendPath( dirPath, filter)` - Appends a directory path of *.jar's,*.classes to the current loaded class loader.
-* `getLoadedURLs()` - Get all the loaded URLs
+- `create( class )` - Create a loaded Java class
+- `appendPath( dirPath, filter)` - Appends a directory path of *.jar's,*.classes to the current loaded class loader.
+- `getLoadedURLs()` - Get all the loaded URLs
 
 ## WireBox DSL
 
