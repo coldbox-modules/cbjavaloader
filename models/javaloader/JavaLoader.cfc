@@ -113,10 +113,12 @@
 	>
 		<cfargument name="className" hint="The name of the class to create" type="string" required="Yes">
 		<cfscript>
-		try {	
-			if( server.keyExists( "boxlang" ) ){
+		try {
+			if ( server.keyExists( "boxlang" ) ) {
 				// Boxlang's Dynamic object class handles all of our needs - we just need to retrieve the class through the module classloader
-				return createObject( "java", "ortus.boxlang.runtime.interop.DynamicObject" ).init( getURLClassLoader().loadClass( arguments.className ) );
+				return createObject( "java", "ortus.boxlang.runtime.interop.DynamicObject" ).init(
+					getURLClassLoader().loadClass( arguments.className )
+				);
 			} else {
 				// do this in one line just for speed.
 				return createJavaProxy( getURLClassLoader().loadClass( arguments.className ) );
