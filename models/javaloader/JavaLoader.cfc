@@ -116,7 +116,7 @@
 		try {
 			if ( server.keyExists( "boxlang" ) ) {
 				// Boxlang's Dynamic object class handles all of our needs - we just need to retrieve the class through the module classloader
-				return createObject( "java", "ortus.boxlang.runtime.interop.DynamicObject" ).init(
+				return createObject( "java", "ortus.boxlang.runtime.interop.DynamicObject" ).of(
 					getURLClassLoader().loadClass( arguments.className )
 				);
 			} else {
