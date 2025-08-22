@@ -1,9 +1,9 @@
 {
     "app":{
         "cfengine":"boxlang@1",
-        "serverHomeDirectory":".engine/boxlang-cfml"
+        "serverHomeDirectory":".engine/boxlang"
     },
-    "name":"cbjavaloader-boxlang-cfml@1",
+    "name":"cbjavaloader-boxlang@1",
     "force":true,
     "openBrowser":false,
     "web":{
@@ -31,6 +31,6 @@
         "BOXLANG_DEBUG":true
     },
     "scripts":{
-        "onServerInitialInstall":"install bx-compat-cfml --noSave"
+        "onServerInitialInstall":""
     }
 }
