@@ -27,6 +27,21 @@ component accessors="true" singleton {
 	 * Setup class loading
 	 */
 	function setup( required struct moduleSettings ){
+		// BoxLang 1.8.0+: use native class loading, skip JavaLoader entirely
+		if ( isBoxLangNative() ) {
+			var loadPaths = arguments.moduleSettings.loadPaths ?: [];
+			if ( !isArray( loadPaths ) ) {
+				loadPaths = listToArray( loadPaths );
+			}
+			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive" {
+				server[ getStaticIDKey() ] = loadPaths;
+			}
+			if ( arrayLen( loadPaths ) ) {
+				getRequestClassLoader().addPaths( loadPaths );
+			}
+			return;
+		}
+
 		// verify we have it loaded
 		if ( not isJavaLoaderInScope() ) {
 			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive" {
@@ -55,6 +70,9 @@ component accessors="true" singleton {
 	 * Retrieves a reference to the java class. To create a instance, you must run init() on this object
 	 */
 	function create( required string className ){
+		if ( isBoxLangNative() ) {
+			return createObject( "java", arguments.className, getRequestClassLoader() );
+		}
 		return getJavaLoaderFromScope().create( argumentCollection = arguments );
 	}
 
@@ -65,6 +83,20 @@ component accessors="true" singleton {
 	 * @filter.hint  The directory filter
 	 */
 	function appendPaths( required string dirPath, string filter = "*.jar" ){
+		// BoxLang 1.8.0+: use native class loading
+		if ( isBoxLangNative() ) {
+			var newPaths = arrayOfJars( argumentCollection = arguments );
+			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive" {
+				var stored = structKeyExists( server, getStaticIDKey() ) ? server[ getStaticIDKey() ] : [];
+				stored.addAll( newPaths );
+				server[ getStaticIDKey() ] = stored;
+			}
+			if ( arrayLen( newPaths ) ) {
+				getRequestClassLoader().addPaths( newPaths );
+			}
+			return;
+		}
+
 		// Convert paths to array of file locations
 		var qFiles         = arrayOfJars( argumentCollection = arguments );
 		var iterator       = qFiles.iterator();
@@ -99,6 +131,11 @@ component accessors="true" singleton {
 	 * Get all the loaded URLs
 	 */
 	array function getLoadedURLs(){
+		// BoxLang 1.8.0+: return the stored paths array
+		if ( isBoxLangNative() ) {
+			return structKeyExists( server, getStaticIDKey() ) ? server[ getStaticIDKey() ] : [];
+		}
+
 		var loadedURLs  = getURLClassLoader().getURLs();
 		var returnArray = arrayNew( 1 );
 		var x           = 1;
@@ -114,6 +151,10 @@ component accessors="true" singleton {
 	 * Returns the java.net.URLClassLoader in case you need access to it
 	 */
 	any function getURLClassLoader(){
+		// BoxLang 1.8.0+: return the native request class loader
+		if ( isBoxLangNative() ) {
+			return getRequestClassLoader();
+		}
 		return getJavaLoaderFromScope().getURLClassLoader();
 	}
 
@@ -121,6 +162,9 @@ component accessors="true" singleton {
 	 * Get the Javaloader Version
 	 */
 	string function getVersion(){
+		if ( isBoxLangNative() ) {
+			return "boxlang-native";
+		}
 		return getJavaLoaderFromScope().getVersion();
 	}
 
@@ -158,6 +202,26 @@ component accessors="true" singleton {
 
 	private boolean function isJavaLoaderInScope(){
 		return structKeyExists( server, getstaticIDKey() );
+	}
+
+	/**
+	 * Detects whether we are running on BoxLang 1.8.0+ with native dynamic class loading support.
+	 * Result is cached in variables scope since Loader is a singleton.
+	 */
+	private boolean function isBoxLangNative(){
+		if ( structKeyExists( variables, "_boxLangNative" ) ) {
+			return variables._boxLangNative;
+		}
+		variables._boxLangNative = false;
+		if ( structKeyExists( server, "boxlang" ) ) {
+			try {
+				getRequestClassLoader().addPaths( [] );
+				variables._boxLangNative = true;
+			} catch ( any e ) {
+				variables._boxLangNative = false;
+			}
+		}
+		return variables._boxLangNative;
 	}
 
 }
