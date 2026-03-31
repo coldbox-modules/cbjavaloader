@@ -42,7 +42,7 @@ component {
 		// Always bind Core JavaLoader; Loader.setup() will determine the actual strategy
 		binder.map( "jl@cbjavaloader" ).to( "#moduleMapping#.models.javaloader.JavaLoader" );
 
-		var isBoxLang = structKeyExists( server, "boxlang" );
+		var isBoxLang     = structKeyExists( server, "boxlang" );
 		// Duplicating so our final change won't affect the main module settings
 		var finalSettings = duplicate( settings );
 
