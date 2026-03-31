@@ -27,6 +27,18 @@ component accessors="true" singleton {
 	 * Setup class loading
 	 */
 	function setup( required struct moduleSettings ){
+		// BoxLang 1.8.0+: use native class loading, skip JavaLoader entirely
+		if ( isBoxLangNative() ) {
+			var loadPaths = arguments.moduleSettings.loadPaths ?: [];
+			if ( !isArray( loadPaths ) ) {
+				loadPaths = listToArray( loadPaths );
+			}
+			if ( arrayLen( loadPaths ) ) {
+				getRequestClassLoader().addPaths( loadPaths );
+			}
+			return;
+		}
+
 		// verify we have it loaded
 		if ( not isJavaLoaderInScope() ) {
 			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive" {
@@ -55,6 +67,9 @@ component accessors="true" singleton {
 	 * Retrieves a reference to the java class. To create a instance, you must run init() on this object
 	 */
 	function create( required string className ){
+		if ( isBoxLangNative() ) {
+			return createObject( "java", arguments.className, getRequestClassLoader() );
+		}
 		return getJavaLoaderFromScope().create( argumentCollection = arguments );
 	}
 
@@ -65,6 +80,15 @@ component accessors="true" singleton {
 	 * @filter.hint  The directory filter
 	 */
 	function appendPaths( required string dirPath, string filter = "*.jar" ){
+		// BoxLang 1.8.0+: use native class loading
+		if ( isBoxLangNative() ) {
+			var newPaths = arrayOfJars( argumentCollection = arguments );
+			if ( arrayLen( newPaths ) ) {
+				getRequestClassLoader().addPaths( newPaths );
+			}
+			return;
+		}
+
 		// Convert paths to array of file locations
 		var qFiles         = arrayOfJars( argumentCollection = arguments );
 		var iterator       = qFiles.iterator();
@@ -99,6 +123,16 @@ component accessors="true" singleton {
 	 * Get all the loaded URLs
 	 */
 	array function getLoadedURLs(){
+		// BoxLang 1.8.0+: get URLs directly from the request class loader
+		if ( isBoxLangNative() ) {
+			var loadedURLs  = getRequestClassLoader().getURLs();
+			var returnArray = arrayNew( 1 );
+			for ( var url in loadedURLs ) {
+				arrayAppend( returnArray, url.toString() );
+			}
+			return returnArray;
+		}
+
 		var loadedURLs  = getURLClassLoader().getURLs();
 		var returnArray = arrayNew( 1 );
 		var x           = 1;
@@ -114,6 +148,10 @@ component accessors="true" singleton {
 	 * Returns the java.net.URLClassLoader in case you need access to it
 	 */
 	any function getURLClassLoader(){
+		// BoxLang 1.8.0+: return the native request class loader
+		if ( isBoxLangNative() ) {
+			return getRequestClassLoader();
+		}
 		return getJavaLoaderFromScope().getURLClassLoader();
 	}
 
@@ -121,7 +159,11 @@ component accessors="true" singleton {
 	 * Get the Javaloader Version
 	 */
 	string function getVersion(){
-		return getJavaLoaderFromScope().getVersion();
+		if ( isJavaLoaderInScope() ) {
+			return getJavaLoaderFromScope().getVersion();
+		}
+		// BoxLang native mode: JavaLoader is not in scope; return the same version string
+		return "1.2";
 	}
 
 	/**
@@ -158,6 +200,13 @@ component accessors="true" singleton {
 
 	private boolean function isJavaLoaderInScope(){
 		return structKeyExists( server, getstaticIDKey() );
+	}
+
+	/**
+	 * Detects whether we are running on BoxLang, which always supports native dynamic class loading.
+	 */
+	private boolean function isBoxLangNative(){
+		return structKeyExists( server, "boxlang" );
 	}
 
 }

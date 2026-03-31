@@ -39,9 +39,10 @@ component {
 	 * Fired when the module is registered and activated.
 	 */
 	function onLoad(){
-		// Bind Core JavaLoader
+		// Always bind Core JavaLoader; Loader.setup() will determine the actual strategy
 		binder.map( "jl@cbjavaloader" ).to( "#moduleMapping#.models.javaloader.JavaLoader" );
 
+		var isBoxLang = structKeyExists( server, "boxlang" );
 		// Duplicating so our final change won't affect the main module settings
 		var finalSettings = duplicate( settings );
 
@@ -67,11 +68,13 @@ component {
 			}
 		}
 
-		// Dynamic Proxy
-		arrayPrepend(
-			finalSettings.loadPaths,
-			variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
-		);
+		// cfcdynamicproxy.jar is only needed for legacy CF runtimes, not BoxLang
+		if ( !isBoxLang ) {
+			arrayPrepend(
+				finalSettings.loadPaths,
+				variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
+			);
+		}
 
 		// Load JavaLoader and class loading
 		wirebox.getInstance( "loader@cbjavaloader" ).setup( finalSettings );

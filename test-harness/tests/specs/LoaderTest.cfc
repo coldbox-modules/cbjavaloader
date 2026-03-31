@@ -39,7 +39,9 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 			it( "should get loaded URLs", function(){
 				var loader = getLoader();
 				expect( loader.getLoadedURls() ).toBeArray();
-				expect( loader.getLoadedURLs() ).toHaveLength( 2 );
+				// BoxLang native: 1 path (helloworld.jar); CF/Lucee: 2 paths (+ cfcdynamicproxy.jar)
+				var expectedLen = structKeyExists( server, "boxlang" ) ? 1 : 2;
+				expect( loader.getLoadedURLs() ).toHaveLength( expectedLen );
 			} );
 
 			it( "should retrieve via custom DSL", function(){
