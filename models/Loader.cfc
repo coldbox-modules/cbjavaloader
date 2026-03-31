@@ -75,9 +75,9 @@ component accessors="true" singleton {
 	function create( required string className ){
 		if ( isBoxLangNative() ) {
 			return createObject(
-				"java",
-				arguments.className,
-				getRequestClassLoader()
+				type: "java",
+				className: arguments.className,
+				classLoader: getRequestClassLoader()
 			);
 		}
 		return getJavaLoaderFromScope().create( argumentCollection = arguments );
@@ -135,14 +135,11 @@ component accessors="true" singleton {
 	array function getLoadedURLs(){
 		// BoxLang 1.8.0+: get URLs directly from the request class loader
 		if ( isBoxLangNative() ) {
-			var loadedURLs  = getRequestClassLoader().getURLs();
-			var returnArray = arrayNew( 1 );
-			for ( var url in loadedURLs ) {
-				arrayAppend( returnArray, url.toString() );
-			}
-			return returnArray;
+			return getRequestClassLoader()
+				.getURLs()
+				.map( ( item ) => item.toString() )
 		}
-
+		// None native: get URLs from JavaLoader's URLClassLoader
 		var loadedURLs  = getURLClassLoader().getURLs();
 		var returnArray = arrayNew( 1 );
 		var x           = 1;
