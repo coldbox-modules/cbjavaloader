@@ -1,9 +1,9 @@
 <p align="center">
-	<img src="https://www.ortussolutions.com/__media/coldbox-185-logo.png">
+	<img src="https://www.ortussolutions.com/__media/coldbox-185-logo.png" alt="ColdBox logo">
 	<br>
-	<img src="https://www.ortussolutions.com/__media/wirebox-185.png" height="125">
-	<img src="https://www.ortussolutions.com/__media/cachebox-185.png" height="125" >
-	<img src="https://www.ortussolutions.com/__media/logbox-185.png"  height="125">
+	<img src="https://www.ortussolutions.com/__media/wirebox-185.png" height="125" alt="WireBox logo">
+	<img src="https://www.ortussolutions.com/__media/cachebox-185.png" height="125" alt="CacheBox logo">
+	<img src="https://www.ortussolutions.com/__media/logbox-185.png"  height="125" alt="LogBox logo">
 </p>
 
 <p align="center">
@@ -15,13 +15,9 @@
 
 ----
 
-# Welcome to the cbJavaloader Project
+# Welcome to cbJavaLoader
 
-<a href="https://github.com/coldbox-modules/cbjavaloader/actions/workflows/ci.yml">
-	<img src="https://github.com/coldbox-modules/cbjavaloader/actions/workflows/ci.yml/badge.svg">
-</a>
-
-This module will allow your ColdBox applications to class load different Java classes and libraries at runtime via the JavaLoader project.  It also registers a WireBox DSL so you can easily inject Java classes into your objects using WireBox.
+This module allows your ColdBox applications to class load different Java classes and libraries at runtime. On Adobe ColdFusion and Lucee it uses the bundled JavaLoader project. On BoxLang 1.8.0+ it uses BoxLang's native request class loader while keeping the same `loader@cbjavaloader` facade and `javaloader:` WireBox DSL.
 
 ## License
 
@@ -36,9 +32,9 @@ Apache License, Version 2.0.
 
 ## System Requirements
 
-- BoxLang 1+
+- BoxLang 1.8.0+
 - Lucee 5+
-- ColdFusion 2021+
+- Adobe ColdFusion 2023+
 
 ## Instructions
 
@@ -48,13 +44,22 @@ Just drop into your **modules** folder or use the box-cli to install
 
 The module has a default folder called `lib` where any jars you drop there will be class loaded automatically.  However, we recommend using the `loadpaths` setting for selecting an array of locations to class load, so when the module updates you won't lose those files.
 
-## Models
+On BoxLang 1.8.0+ those configured paths are added to the native request class loader. On Adobe ColdFusion and Lucee they continue to be loaded through JavaLoader.
 
-The module registers the following mapping in WireBox: `loader@cbjavaloader`. Which is the class you will use to class load, append paths and much more.  Check out the included API Docs for much more information.  The main methods of importance of the java loader are:
+## Loader API
+
+The module registers the following mapping in WireBox: `loader@cbjavaloader`. This is the facade you will use to class load, append paths, and inspect the active class loader. The main methods are:
 
 - `create( class )` - Create a loaded Java class
-- `appendPath( dirPath, filter)` - Appends a directory path of *.jar's,*.classes to the current loaded class loader.
+- `appendPaths( dirPath, filter )` - Appends a directory path of `*.jar` or `*.class` files to the current class loader.
 - `getLoadedURLs()` - Get all the loaded URLs
+- `getURLClassLoader()` - Get the active class loader implementation
+
+## Runtime Behavior
+
+- BoxLang 1.8.0+: `loader@cbjavaloader` uses the native request class loader. `setup()` and `appendPaths()` call `addPaths()`, and `create()` resolves classes with `createObject( "java", className, getRequestClassLoader() )`.
+- Adobe ColdFusion and Lucee: the module keeps using the bundled JavaLoader instance stored in server scope, including the legacy `cfcdynamicproxy.jar` support jar.
+- Because of that runtime split, `getLoadedURLs()` will usually report fewer entries on BoxLang than on Adobe ColdFusion or Lucee for the same configuration.
 
 ## WireBox DSL
 
@@ -71,25 +76,26 @@ property name="buffer" inject="javaloader:org.class.path.StringBuffer";
 Here are the module settings you can place in your `ColdBox.cfc` under an `moduleSettings.cbJavaLoader` structure:
 
 ```js
-
 moduleSettings = {
 	cbJavaLoader = {
 		// A single path, and array of paths or a single Jar
 		loadPaths = [],
-		// Load ColdFusion classes with loader
+		// Load ColdFusion classes with loader (JavaLoader runtimes only)
 		loadColdFusionClassPath = false,
-		// Attach a custom class loader as a parent
+		// Attach a custom class loader as a parent (JavaLoader runtimes only)
 		parentClassLoader = "",
-		// Directories that contain Java source code that are to be dynamically compiled
+		// Directories that contain Java source code that are to be dynamically compiled (JavaLoader runtimes only)
 		sourceDirectories = [],
-		// the directory to build the .jar file for dynamic compilation in, defaults to ./tmp
+		// the directory to build the .jar file for dynamic compilation in, defaults to ./tmp (JavaLoader runtimes only)
 		compileDirectory = "models/javaloader/tmp",
-		// Whether or not the source is trusted, i.e. it is going to change? Defaults to false, so changes will be recompiled and loaded
+		// Whether or not the source is trusted, i.e. it is going to change? Defaults to false, so changes will be recompiled and loaded (JavaLoader runtimes only)
 		trustedSource = false
 	}
 };
 
 ```
+
+In BoxLang native mode, `loadPaths` is the primary setting used by the loader facade. The remaining compilation and parent-loader settings continue to apply to the JavaLoader-backed Adobe ColdFusion and Lucee path.
 
 Below is a simple example:
 
@@ -116,12 +122,10 @@ component{
 }
 ```
 
----
+----
 
-********************************************************************************
 Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
 www.ortussolutions.com
-********************************************************************************
 
 ### HONOR GOES TO GOD ABOVE ALL
 
