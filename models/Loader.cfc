@@ -25,6 +25,8 @@ component accessors="true" singleton {
 
 	/**
 	 * Setup class loading
+	 *
+	 * @moduleSettings The module settings struct, which can contain: loadPaths, loadColdFusionClassPath, parentClassLoader, sourceDirectories, compileDirectory, trustedSource
 	 */
 	function setup( required struct moduleSettings ){
 		// BoxLang 1.8.0+: use native class loading, skip JavaLoader entirely
@@ -65,6 +67,10 @@ component accessors="true" singleton {
 
 	/**
 	 * Retrieves a reference to the java class. To create a instance, you must run init() on this object
+	 *
+	 * @className The fully qualified class name to create, e.g. "com.mypackage.MyClass"
+	 *
+	 * @return The Java class reference, which you can run init() on to create an instance
 	 */
 	function create( required string className ){
 		if ( isBoxLangNative() ) {
@@ -80,8 +86,8 @@ component accessors="true" singleton {
 	/**
 	 * Appends a directory path of *.jar's,*.classes to the current loaded class loader.
 	 *
-	 * @dirPath.hint The directory absolute path to load
-	 * @filter.hint  The directory filter
+	 * @dirPath The directory absolute path to load
+	 * @filter The directory filter
 	 */
 	function appendPaths( required string dirPath, string filter = "*.jar" ){
 		// BoxLang 1.8.0+: use native class loading
