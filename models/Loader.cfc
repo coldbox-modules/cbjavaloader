@@ -75,9 +75,11 @@ component accessors="true" singleton {
 	function create( required string className ){
 		if ( isBoxLangNative() ) {
 			return createObject(
-				type       : "java",
-				className  : arguments.className,
-				classLoader: getRequestClassLoader()
+				"java",
+				arguments.className,
+				javaCast( "null", "" ),
+				false
+				getRequestClassLoader()
 			);
 		}
 		return getJavaLoaderFromScope().create( argumentCollection = arguments );
