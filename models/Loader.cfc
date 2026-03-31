@@ -77,7 +77,7 @@ component accessors="true" singleton {
 			return createObject(
 				"java",
 				arguments.className,
-				javaCast( "null", "" ),
+				javacast( "null", "" ),
 				false
 				getRequestClassLoader()
 			);
