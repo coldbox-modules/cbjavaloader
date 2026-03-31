@@ -205,23 +205,10 @@ component accessors="true" singleton {
 	}
 
 	/**
-	 * Detects whether we are running on BoxLang 1.8.0+ with native dynamic class loading support.
-	 * Result is cached in variables scope since Loader is a singleton.
+	 * Detects whether we are running on BoxLang, which always supports native dynamic class loading.
 	 */
 	private boolean function isBoxLangNative(){
-		if ( structKeyExists( variables, "_boxLangNative" ) ) {
-			return variables._boxLangNative;
-		}
-		variables._boxLangNative = false;
-		if ( structKeyExists( server, "boxlang" ) ) {
-			try {
-				getRequestClassLoader().addPaths( [] );
-				variables._boxLangNative = true;
-			} catch ( any e ) {
-				variables._boxLangNative = false;
-			}
-		}
-		return variables._boxLangNative;
+		return structKeyExists( server, "boxlang" );
 	}
 
 }
