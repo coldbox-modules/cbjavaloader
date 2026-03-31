@@ -33,9 +33,6 @@ component accessors="true" singleton {
 			if ( !isArray( loadPaths ) ) {
 				loadPaths = listToArray( loadPaths );
 			}
-			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive" {
-				server[ getStaticIDKey() ] = loadPaths;
-			}
 			if ( arrayLen( loadPaths ) ) {
 				getRequestClassLoader().addPaths( loadPaths );
 			}
@@ -86,11 +83,6 @@ component accessors="true" singleton {
 		// BoxLang 1.8.0+: use native class loading
 		if ( isBoxLangNative() ) {
 			var newPaths = arrayOfJars( argumentCollection = arguments );
-			lock name="#variables.staticIDKey#" throwontimeout="true" timeout="30" type="exclusive" {
-				var stored = structKeyExists( server, getStaticIDKey() ) ? server[ getStaticIDKey() ] : [];
-				stored.addAll( newPaths );
-				server[ getStaticIDKey() ] = stored;
-			}
 			if ( arrayLen( newPaths ) ) {
 				getRequestClassLoader().addPaths( newPaths );
 			}
@@ -131,9 +123,14 @@ component accessors="true" singleton {
 	 * Get all the loaded URLs
 	 */
 	array function getLoadedURLs(){
-		// BoxLang 1.8.0+: return the stored paths array
+		// BoxLang 1.8.0+: get URLs directly from the request class loader
 		if ( isBoxLangNative() ) {
-			return structKeyExists( server, getStaticIDKey() ) ? server[ getStaticIDKey() ] : [];
+			var loadedURLs  = getRequestClassLoader().getURLs();
+			var returnArray = arrayNew( 1 );
+			for ( var url in loadedURLs ) {
+				arrayAppend( returnArray, url.toString() );
+			}
+			return returnArray;
 		}
 
 		var loadedURLs  = getURLClassLoader().getURLs();
@@ -162,10 +159,11 @@ component accessors="true" singleton {
 	 * Get the Javaloader Version
 	 */
 	string function getVersion(){
-		if ( isBoxLangNative() ) {
-			return "boxlang-native";
+		if ( isJavaLoaderInScope() ) {
+			return getJavaLoaderFromScope().getVersion();
 		}
-		return getJavaLoaderFromScope().getVersion();
+		// BoxLang native mode: JavaLoader is not in scope; return the same version string
+		return "1.2";
 	}
 
 	/**
