@@ -75,8 +75,8 @@ component accessors="true" singleton {
 	function create( required string className ){
 		if ( isBoxLangNative() ) {
 			return createObject(
-				type: "java",
-				className: arguments.className,
+				type       : "java",
+				className  : arguments.className,
 				classLoader: getRequestClassLoader()
 			);
 		}
@@ -87,7 +87,7 @@ component accessors="true" singleton {
 	 * Appends a directory path of *.jar's,*.classes to the current loaded class loader.
 	 *
 	 * @dirPath The directory absolute path to load
-	 * @filter The directory filter
+	 * @filter  The directory filter
 	 */
 	function appendPaths( required string dirPath, string filter = "*.jar" ){
 		// BoxLang 1.8.0+: use native class loading
@@ -135,9 +135,7 @@ component accessors="true" singleton {
 	array function getLoadedURLs(){
 		// BoxLang 1.8.0+: get URLs directly from the request class loader
 		if ( isBoxLangNative() ) {
-			return getRequestClassLoader()
-				.getURLs()
-				.map( ( item ) => item.toString() )
+			return getRequestClassLoader().getURLs().map( ( item ) => item.toString() )
 		}
 		// None native: get URLs from JavaLoader's URLClassLoader
 		var loadedURLs  = getURLClassLoader().getURLs();
