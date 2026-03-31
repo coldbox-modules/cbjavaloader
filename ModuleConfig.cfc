@@ -39,13 +39,10 @@ component {
 	 * Fired when the module is registered and activated.
 	 */
 	function onLoad(){
+		// Always bind Core JavaLoader; Loader.setup() will determine the actual strategy
+		binder.map( "jl@cbjavaloader" ).to( "#moduleMapping#.models.javaloader.JavaLoader" );
+
 		var isBoxLang = structKeyExists( server, "boxlang" );
-
-		// Bind Core JavaLoader only for non-BoxLang runtimes; BoxLang uses native class loading
-		if ( !isBoxLang ) {
-			binder.map( "jl@cbjavaloader" ).to( "#moduleMapping#.models.javaloader.JavaLoader" );
-		}
-
 		// Duplicating so our final change won't affect the main module settings
 		var finalSettings = duplicate( settings );
 
