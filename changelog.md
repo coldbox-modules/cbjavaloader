@@ -15,6 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Native BoxLang 1.8.0+ dynamic class loading support through the request class loader.
+
+### Changed
+
+- `loader@cbjavaloader` now skips JavaLoader initialization on BoxLang and loads configured `loadPaths` directly into the native request class loader.
+- BoxLang startup no longer prepends `cfcdynamicproxy.jar`, so `getLoadedURLs()` differs from Adobe CF and Lucee runtimes.
+
+## [2.3.0] - 2025-08-23
+
+## [2.2.0] - 2025-02-19
+
+### Added
+
 - BoxLang compat to alleviate ACF hardcoding of Java proxies
 - BoxLang Prime testing
 - Adobe 2025 testing

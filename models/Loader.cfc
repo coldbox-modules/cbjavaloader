@@ -2,8 +2,9 @@
  * Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
  * www.ortussolutions.com
  * ---
- * Loads External Java Classes, while providing access to ColdFusion classes by interfacing with JavaLoader
- * it Stores a reference in server scope to avoid leakage.
+ * Loads external Java classes by interfacing with the bundled JavaLoader library.
+ * It stores a reference in server scope to avoid class loader leakage.
+ * On BoxLang 1.8.0+, use BXLoader which extends this and overrides with native class loading.
  */
 component accessors="true" singleton {
 
@@ -25,6 +26,8 @@ component accessors="true" singleton {
 
 	/**
 	 * Setup class loading
+	 *
+	 * @moduleSettings The module settings struct, which can contain: loadPaths, loadColdFusionClassPath, parentClassLoader, sourceDirectories, compileDirectory, trustedSource
 	 */
 	function setup( required struct moduleSettings ){
 		// verify we have it loaded
@@ -52,7 +55,11 @@ component accessors="true" singleton {
 	}
 
 	/**
-	 * Retrieves a reference to the java class. To create a instance, you must run init() on this object
+	 * Retrieves a reference to the java class. To create an instance, you must run init() on this object.
+	 *
+	 * @className The fully qualified class name to create, e.g. "com.mypackage.MyClass"
+	 *
+	 * @return The Java class reference, which you can run init() on to create an instance
 	 */
 	function create( required string className ){
 		return getJavaLoaderFromScope().create( argumentCollection = arguments );
@@ -61,8 +68,8 @@ component accessors="true" singleton {
 	/**
 	 * Appends a directory path of *.jar's,*.classes to the current loaded class loader.
 	 *
-	 * @dirPath.hint The directory absolute path to load
-	 * @filter.hint  The directory filter
+	 * @dirPath The directory absolute path to load
+	 * @filter  The directory filter
 	 */
 	function appendPaths( required string dirPath, string filter = "*.jar" ){
 		// Convert paths to array of file locations
@@ -121,7 +128,10 @@ component accessors="true" singleton {
 	 * Get the Javaloader Version
 	 */
 	string function getVersion(){
-		return getJavaLoaderFromScope().getVersion();
+		if ( isJavaLoaderInScope() ) {
+			return getJavaLoaderFromScope().getVersion();
+		}
+		return "";
 	}
 
 	/**

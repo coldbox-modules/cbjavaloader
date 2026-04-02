@@ -3,6 +3,7 @@
 ## What this project is
 
 - A ColdBox module that embeds and exposes the JavaLoader library so CFML apps can dynamically load/compile Java classes and JARs.
+- On BoxLang 1.8.0+ the public loader facade uses BoxLang's native request class loader for dynamic class loading instead of instantiating the bundled JavaLoader.
 - Key pieces: `ModuleConfig.cfc` (module settings & DSL registration), `models/Loader.cfc` (public module API), `models/javaloader/` (JavaLoader, JavaProxy, JavaCompiler implementations), and `test-harness/` (integration test app).
 
 ## Quick dev workflows (explicit)
@@ -26,13 +27,17 @@
 
 - WireBox DSL: `ModuleConfig.cfc` registers a custom DSL `javaloader` via `wireBox.registerDSL(...)`. Use inject="javaloader:ClassName" for DSL injections.
 - Main WireBox mappings: `binder.map("jl@cbjavaloader")` (internal JavaLoader) and `loader@cbjavaloader` (public module proxy, see `models/Loader.cfc`). Use `getWireBox().getInstance("loader@cbjavaloader")` in tests or handlers.
-- Persistent loader instance: `models/Loader.cfc` stores the JavaLoader instance in `server` scope under a hashed static key and uses `lock` for safe init/re-init — avoid re-instantiating directly; call `Loader.setup(moduleSettings)` or `Loader.getJavaLoader()`.
+- Runtime split: `ModuleConfig.cfc` maps `loader@cbjavaloader` to `models/BXLoader.cfc` on BoxLang and `models/Loader.cfc` on Adobe CF/Lucee. This avoids parsing errors in legacy engines caused by BoxLang-only syntax.
+- `models/Loader.cfc` — pure JavaLoader/Adobe CF/Lucee implementation. Stores the JavaLoader instance in `server` scope and uses `lock` for safe init/re-init.
+- `models/BXLoader.cfc` — extends `Loader`, overrides `setup`, `create`, `appendPaths`, `getLoadedURLs`, `getURLClassLoader`, and `getVersion` to use `getRequestClassLoader()` natively.
+- Module startup expands configured `loadPaths` into concrete files in `ModuleConfig.cfc`; `cfcdynamicproxy.jar` is prepended only for non-BoxLang runtimes.
 - Java compilation: `models/javaloader/JavaCompiler.cfc` expects a JVM `tools.jar` compiler on the classpath; compiled jars are placed by default in `models/javaloader/tmp` (see module `settings.compileDirectory`).
 
 ## Important files to consult (fast path)
 
-- `ModuleConfig.cfc` — module settings defaults and DSL registration.
-- `models/Loader.cfc` — public API that other apps use (`create`, `appendPath`, `getLoadedURLs`).
+- `ModuleConfig.cfc` — module settings defaults, DSL registration, and runtime-conditional WireBox mapping (BXLoader vs Loader).
+- `models/Loader.cfc` — public API for Adobe CF/Lucee using the bundled JavaLoader.
+- `models/BXLoader.cfc` — BoxLang-native override; extends Loader and uses `getRequestClassLoader()` directly.
 - `models/javaloader/JavaLoader.cfc` — upstream JavaLoader implementation (large file, primary behavior).
 - `models/javaloader/JavaCompiler.cfc` — dynamic compilation logic and compiler discovery.
 - `build/Build.cfc` and `box.json` — packaging, test runner URL and build scripts used by CI.
@@ -45,7 +50,9 @@
 
 ## Safety, edge cases, and constraints agents must respect
 
-- Do not remove or replace the `server`-scoped loader without using the `Loader` API — other code/tests expect the single instance.
+- Do not remove or replace the `server`-scoped loader without using the `Loader` API on Adobe CF/Lucee — other code/tests expect the single instance there.
+- Do not assume a JavaLoader instance exists in `server` scope on BoxLang; the native path bypasses JavaLoader setup entirely.
+- When changing runtime-sensitive behavior, preserve the BoxLang vs Adobe CF/Lucee differences in `getLoadedURLs()`: BoxLang only reports configured app paths, while Adobe CF/Lucee also includes `cfcdynamicproxy.jar`.
 - Java compilation may fail when the JVM compiler is not available; surface clear errors and point to `JavaCompiler.cfc` and `tools.jar` classpath as remediation.
 
 ## Examples (from repo)
@@ -60,7 +67,7 @@
 
 ## What to do next when editing code
 
-- When changing public behavior in `Loader.cfc` or DSL registration in `ModuleConfig.cfc`, update `test-harness/tests/specs/LoaderTest.cfc` or add a spec demonstrating the change.
+- When changing public behavior in `Loader.cfc` or DSL registration in `ModuleConfig.cfc`, update `test-harness/tests/specs/LoaderTest.cfc` or add a spec demonstrating the change, including runtime-specific expectations when BoxLang behavior differs from Adobe CF/Lucee.
 - Run `box testbox ...` after edits and ensure `test-harness` runner URL in `box.json` matches `build/Build.cfc` test runner if you rely on build tasks.
 
 Please review and tell me if you'd like added examples (e.g., a minimal handler that uses the loader), or if I should fold in more lines from the module-template instructions.

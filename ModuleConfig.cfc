@@ -16,7 +16,7 @@ component {
 	 * Configure module
 	 */
 	function configure(){
-		settings = {
+		variables.settings = {
 			// The array paths to load
 			loadPaths               : [],
 			// Load ColdFusion classes with loader
@@ -39,8 +39,17 @@ component {
 	 * Fired when the module is registered and activated.
 	 */
 	function onLoad(){
-		// Bind Core JavaLoader
+		// Always bind Core JavaLoader for legacy runtimes
 		binder.map( "jl@cbjavaloader" ).to( "#moduleMapping#.models.javaloader.JavaLoader" );
+
+		var isBoxLang = structKeyExists( server, "boxlang" );
+
+		// On BoxLang use the native BXLoader; on Adobe CF / Lucee use the JavaLoader-backed Loader
+		if ( isBoxLang ) {
+			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.models.BXLoader" );
+		} else {
+			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.models.Loader" );
+		}
 
 		// Duplicating so our final change won't affect the main module settings
 		var finalSettings = duplicate( settings );
@@ -67,11 +76,13 @@ component {
 			}
 		}
 
-		// Dynamic Proxy
-		arrayPrepend(
-			finalSettings.loadPaths,
-			variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
-		);
+		// cfcdynamicproxy.jar is only needed for legacy CF runtimes, not BoxLang
+		if ( !isBoxLang ) {
+			arrayPrepend(
+				finalSettings.loadPaths,
+				variables.modulePath & "/models/javaloader/support/cfcdynamicproxy/lib/cfcdynamicproxy.jar"
+			);
+		}
 
 		// Load JavaLoader and class loading
 		wirebox.getInstance( "loader@cbjavaloader" ).setup( finalSettings );
