@@ -49,7 +49,11 @@ component extends="Loader" accessors="true" singleton {
 	 * @return The Java class reference
 	 */
 	function create( required string className ){
-		return createObject( type:"java", className: arguments.className, classLoader: getRequestClassLoader() )
+		return createObject(
+			type       : "java",
+			className  : arguments.className,
+			classLoader: getRequestClassLoader()
+		)
 	}
 
 	/**
@@ -69,9 +73,7 @@ component extends="Loader" accessors="true" singleton {
 	 * Get all the loaded URLs from the native request class loader.
 	 */
 	array function getLoadedURLs(){
-		return getRequestClassLoader()
-			.getURLs()
-			.map( target => target.toString() )
+		return getRequestClassLoader().getURLs().map( target => target.toString() )
 	}
 
 	/**
