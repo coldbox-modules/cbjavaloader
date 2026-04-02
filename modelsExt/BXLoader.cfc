@@ -74,7 +74,7 @@ component extends="Loader" accessors="true" singleton {
 	 * Get all the loaded URLs from the native request class loader.
 	 */
 	array function getLoadedURLs(){
-		return getRequestClassLoader().getURLs().map( target => target.toString() )
+		return getRequestClassLoader().getURLs().map( target -> target.toString() )
 	}
 
 	/**

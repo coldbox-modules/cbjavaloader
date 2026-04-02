@@ -46,7 +46,7 @@ component {
 
 		// On BoxLang use the native BXLoader; on Adobe CF / Lucee use the JavaLoader-backed Loader
 		if ( isBoxLang ) {
-			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.models.BXLoader" );
+			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.modelsExt.BXLoader" );
 		} else {
 			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.models.Loader" );
 		}
