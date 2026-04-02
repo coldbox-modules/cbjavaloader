@@ -6,7 +6,7 @@
  * Extends Loader and overrides all methods to use BoxLang's native request class loader
  * instead of the bundled JavaLoader library.
  */
-component extends="Loader" accessors="true" singleton {
+component extends="cbjavaloader.models.Loader" accessors="true" singleton {
 
 	/**
 	 * Constructor — no server-scope key needed for BoxLang native mode.
@@ -74,7 +74,7 @@ component extends="Loader" accessors="true" singleton {
 	 * Get all the loaded URLs from the native request class loader.
 	 */
 	array function getLoadedURLs(){
-		return getRequestClassLoader().getURLs().map( target => target.toString() )
+		return getRequestClassLoader().getURLs().map( target -> target.toString() )
 	}
 
 	/**
