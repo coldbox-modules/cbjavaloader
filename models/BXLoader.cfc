@@ -12,6 +12,7 @@ component extends="Loader" accessors="true" singleton {
 	 * Constructor — no server-scope key needed for BoxLang native mode.
 	 */
 	function init(){
+		super.init()
 		return this
 	}
 
