@@ -27,14 +27,17 @@
 
 - WireBox DSL: `ModuleConfig.cfc` registers a custom DSL `javaloader` via `wireBox.registerDSL(...)`. Use inject="javaloader:ClassName" for DSL injections.
 - Main WireBox mappings: `binder.map("jl@cbjavaloader")` (internal JavaLoader) and `loader@cbjavaloader` (public module proxy, see `models/Loader.cfc`). Use `getWireBox().getInstance("loader@cbjavaloader")` in tests or handlers.
-- Runtime split: `models/Loader.cfc` branches by runtime. On BoxLang it loads configured paths with `getRequestClassLoader().addPaths(...)` and resolves classes via `createObject( "java", className, getRequestClassLoader() )`. On Adobe CF/Lucee it stores the JavaLoader instance in `server` scope under a hashed static key and uses `lock` for safe init/re-init.
+- Runtime split: `ModuleConfig.cfc` maps `loader@cbjavaloader` to `models/BXLoader.cfc` on BoxLang and `models/Loader.cfc` on Adobe CF/Lucee. This avoids parsing errors in legacy engines caused by BoxLang-only syntax.
+- `models/Loader.cfc` — pure JavaLoader/Adobe CF/Lucee implementation. Stores the JavaLoader instance in `server` scope and uses `lock` for safe init/re-init.
+- `models/BXLoader.cfc` — extends `Loader`, overrides `setup`, `create`, `appendPaths`, `getLoadedURLs`, `getURLClassLoader`, and `getVersion` to use `getRequestClassLoader()` natively.
 - Module startup expands configured `loadPaths` into concrete files in `ModuleConfig.cfc`; `cfcdynamicproxy.jar` is prepended only for non-BoxLang runtimes.
 - Java compilation: `models/javaloader/JavaCompiler.cfc` expects a JVM `tools.jar` compiler on the classpath; compiled jars are placed by default in `models/javaloader/tmp` (see module `settings.compileDirectory`).
 
 ## Important files to consult (fast path)
 
-- `ModuleConfig.cfc` — module settings defaults and DSL registration.
-- `models/Loader.cfc` — public API that other apps use (`create`, `appendPaths`, `getLoadedURLs`) and the BoxLang/native-vs-JavaLoader branching.
+- `ModuleConfig.cfc` — module settings defaults, DSL registration, and runtime-conditional WireBox mapping (BXLoader vs Loader).
+- `models/Loader.cfc` — public API for Adobe CF/Lucee using the bundled JavaLoader.
+- `models/BXLoader.cfc` — BoxLang-native override; extends Loader and uses `getRequestClassLoader()` directly.
 - `models/javaloader/JavaLoader.cfc` — upstream JavaLoader implementation (large file, primary behavior).
 - `models/javaloader/JavaCompiler.cfc` — dynamic compilation logic and compiler discovery.
 - `build/Build.cfc` and `box.json` — packaging, test runner URL and build scripts used by CI.

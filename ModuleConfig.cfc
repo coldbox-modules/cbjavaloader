@@ -16,7 +16,7 @@ component {
 	 * Configure module
 	 */
 	function configure(){
-		settings = {
+		variables.settings = {
 			// The array paths to load
 			loadPaths               : [],
 			// Load ColdFusion classes with loader
@@ -39,10 +39,18 @@ component {
 	 * Fired when the module is registered and activated.
 	 */
 	function onLoad(){
-		// Always bind Core JavaLoader; Loader.setup() will determine the actual strategy
+		// Always bind Core JavaLoader for legacy runtimes
 		binder.map( "jl@cbjavaloader" ).to( "#moduleMapping#.models.javaloader.JavaLoader" );
 
-		var isBoxLang     = structKeyExists( server, "boxlang" );
+		var isBoxLang = structKeyExists( server, "boxlang" );
+
+		// On BoxLang use the native BXLoader; on Adobe CF / Lucee use the JavaLoader-backed Loader
+		if ( isBoxLang ) {
+			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.models.BXLoader" );
+		} else {
+			binder.map( "loader@cbjavaloader" ).to( "#moduleMapping#.models.Loader" );
+		}
+
 		// Duplicating so our final change won't affect the main module settings
 		var finalSettings = duplicate( settings );
 
