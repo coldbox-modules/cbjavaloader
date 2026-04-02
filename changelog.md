@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-04-02
+
+## [2.3.0] - 2025-08-23
+
+## [2.2.0] - 2025-02-19
+
 ### Added
 
 - Native BoxLang 1.8.0+ dynamic class loading support through the request class loader.
@@ -117,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Create first module version
 
-[unreleased]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.3.0...HEAD
+[unreleased]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/coldbox-modules/cbjavaloader/compare/768425a02713cf6d17ebae745a4d15cc1e8b603a...v2.2.0
