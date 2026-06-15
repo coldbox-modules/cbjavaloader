@@ -305,38 +305,54 @@
 		output    ="false"
 	>
 		<cfscript>
-		var iterator                = getClassLoadPaths().iterator();
-		var file                    = 0;
-		var classLoader             = 0;
-		var networkClassLoaderClass = 0;
-		var networkClassLoaderProxy = 0;
+		var networkClassLoaderKey = instance.static.uuid & "." & getVersion() & ".networkclassloader";
 
-		networkClassLoaderClass = getServerURLClassLoader().loadClass(
-			"com.compoundtheory.classloader.NetworkClassLoader"
-		);
-
-		networkClassLoaderProxy = createJavaProxy( networkClassLoaderClass );
-
-		if ( isObject( getParentClassLoader() ) ) {
-			classLoader = networkClassLoaderProxy.init( getParentClassLoader() );
-		} else {
-			classLoader = networkClassLoaderProxy.init();
+		// Reuse existing NetworkClassLoader if already cached in server scope
+		if ( structKeyExists( server, networkClassLoaderKey ) ) {
+			setURLClassLoader( server[ networkClassLoaderKey ] );
+			return;
 		}
 
-		while ( iterator.hasNext() ) {
-			file = createObject( "java", "java.io.File" ).init( iterator.next() );
-			if ( NOT file.exists() ) {
-				throwException(
-					"javaloader.PathNotFoundException",
-					"The path you have specified could not be found",
-					file.getAbsolutePath() & " does not exist"
-				);
+		lock name="javaloader.networkclassloader.load" throwontimeout="true" timeout="60" {
+			// Double-check inside lock
+			if ( structKeyExists( server, networkClassLoaderKey ) ) {
+				setURLClassLoader( server[ networkClassLoaderKey ] );
+				return;
 			}
 
-			classLoader.addUrl( file.toURL() );
-		}
+			var iterator                = getClassLoadPaths().iterator();
+			var file                    = 0;
+			var classLoader             = 0;
+			var networkClassLoaderClass = 0;
+			var networkClassLoaderProxy = 0;
 
-		setURLClassLoader( classLoader );
+			networkClassLoaderClass = getServerURLClassLoader().loadClass(
+				"com.compoundtheory.classloader.NetworkClassLoader"
+			);
+
+			networkClassLoaderProxy = createJavaProxy( networkClassLoaderClass );
+
+			if ( isObject( getParentClassLoader() ) ) {
+				classLoader = networkClassLoaderProxy.init( getParentClassLoader() );
+			} else {
+				classLoader = networkClassLoaderProxy.init();
+			}
+
+			while ( iterator.hasNext() ) {
+				file = createObject( "java", "java.io.File" ).init( iterator.next() );
+				if ( NOT file.exists() ) {
+					throwException(
+						"javaloader.PathNotFoundException",
+						"The path you have specified could not be found",
+						file.getAbsolutePath() & " does not exist"
+					);
+				}
+				classLoader.addUrl( file.toURL() );
+			}
+
+			server[ networkClassLoaderKey ] = classLoader;
+			setURLClassLoader( classLoader );
+		}
 		</cfscript>
 	</cffunction>
 
