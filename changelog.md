@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-06-16
+
 ## [2.5.0] - 2026-04-02
 
 ## [2.4.0] - 2026-04-02
@@ -125,7 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Create first module version
 
-[unreleased]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.5.0...HEAD
+[unreleased]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.6.0...HEAD
+[2.6.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.2.0...v2.3.0
