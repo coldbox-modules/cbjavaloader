@@ -78,7 +78,7 @@
 
 		loadClasses();
 
-		if ( structKeyExists( arguments, "sourceDirectories" ) AND arrayLen( arguments.sourceDirectories ) ) {
+		if ( !isNull( arguments.sourceDirectories ) AND arrayLen( arguments.sourceDirectories ) ) {
 			setJavaCompiler( createObject( "component", "JavaCompiler" ).init( arguments.compileDirectory ) );
 			setSourceDirectories( arguments.sourceDirectories );
 			setCompileDirectory( arguments.compileDirectory );
@@ -567,7 +567,7 @@
 		name      ="initUseJavaProxyCFC"
 		hint      ="initialise whether or not to use the JavaProxy CFC instead of the coldfusion java object"
 		access    ="private"
-		returntype="string"
+		returntype="void"
 		output    ="false"
 	>
 		<cfscript>

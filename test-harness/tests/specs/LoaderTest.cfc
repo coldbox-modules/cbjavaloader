@@ -30,6 +30,14 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root" {
 				expect( loader ).toBeComponent();
 			} );
 
+			it( "should initialize the public loader API with full null support", function(){
+				var loader = new cbjavaloader.models.javaloader.JavaLoader().init();
+
+				expect( loader ).toBeComponent();
+				expect( loader.getClassLoadPaths() ).toBeArray().toBeEmpty();
+				expect( loader.getURLClassLoader() ).toBeInstanceOf( "java.lang.ClassLoader" );
+			} );
+
 			it( "should class load jar files", function(){
 				var event = execute( "main.index" );
 				var prc   = event.getCollection( private = true );
