@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- BOX-177 Each application now gets its own cached `NetworkClassLoader`, so apps on the same JVM no longer share the first app's `loadPaths` jars.
+
 ## [2.6.0] - 2026-06-16
 
 ## [2.5.0] - 2026-04-02
