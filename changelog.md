@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-11-23
+
 ### Fixed
 
 - BOX-177 Each application now gets its own cached `NetworkClassLoader`, so apps on the same JVM no longer share the first app's `loadPaths` jars.
@@ -131,7 +133,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Create first module version
 
-[unreleased]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.6.0...HEAD
+[unreleased]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/coldbox-modules/cbjavaloader/compare/v2.3.0...v2.4.0
