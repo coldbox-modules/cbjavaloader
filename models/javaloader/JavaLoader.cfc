@@ -305,7 +305,8 @@
 		output    ="false"
 	>
 		<cfscript>
-		var networkClassLoaderKey = instance.static.uuid & "." & getVersion() & ".networkclassloader";
+		// Apps on one JVM share server scope, so each application caches its own loader
+		var networkClassLoaderKey = instance.static.uuid & "." & getVersion() & ".networkclassloader." & application.applicationName;
 
 		// Reuse existing NetworkClassLoader if already cached in server scope
 		if ( structKeyExists( server, networkClassLoaderKey ) ) {
